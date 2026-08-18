@@ -180,12 +180,9 @@ h1,h2,h3,h4{ font-family:var(--display); font-weight:600; margin:0; color:var(--
   margin:20px auto 0; max-width:560px; font-size:16.5px; letter-spacing:.02em; color:rgba(246,241,231,.86);
   opacity:0; animation:fadeUp 1.1s var(--ease) .7s forwards;
 }
-.hero-cta{ margin-top:38px; display:grid; grid-template-columns:repeat(2,1fr); gap:18px; width:max-content; max-width:100%; margin-inline:auto;
+.hero-cta{ margin-top:38px; display:flex; gap:18px; justify-content:center; flex-wrap:wrap;
   opacity:0; animation:fadeUp 1.1s var(--ease) .9s forwards; }
-.hero-cta .btn{ width:100%; justify-content:center; white-space:nowrap; }
-@media (max-width:380px){
-  .hero-cta{ grid-template-columns:1fr; width:100%; max-width:240px; }
-}
+.hero-cta .btn{ justify-content:center; }
 @keyframes fadeUp{ from{ opacity:0; transform:translateY(22px);} to{ opacity:1; transform:translateY(0);} }
 
 .scroll-cue{
