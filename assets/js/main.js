@@ -1,4 +1,22 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // Force the two hero buttons to match widths exactly, so the
+  // "Scroll" cue (centered at 50%) lines up with the real gap between them.
+  var equalizeHeroCta = function () {
+    var cta = document.querySelector('.hero-cta');
+    if (!cta) return;
+    var btns = cta.querySelectorAll('.btn');
+    if (btns.length < 2) return;
+    btns.forEach(function (b) { b.style.width = ''; });
+    if (window.innerWidth < 380) return;
+    var maxW = 0;
+    btns.forEach(function (b) { maxW = Math.max(maxW, b.offsetWidth); });
+    btns.forEach(function (b) { b.style.width = maxW + 'px'; });
+  };
+  equalizeHeroCta();
+  window.addEventListener('resize', equalizeHeroCta);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(equalizeHeroCta);
+  }
   // Solid nav on scroll (batched with rAF to avoid forced reflow on every scroll tick)
   var nav = document.querySelector('.site-nav');
   var navTicking = false;
