@@ -8,7 +8,7 @@
    PASTE YOUR DEPLOYED APPS SCRIPT WEB APP URL BELOW — see
    the setup guide provided alongside this website.
    ========================================================= */
-var CALMA_BOOKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyawGaPta5ask0IOKmJD_C6ta6yt5zABeUvnp9TEVT7X8it3UMSwCM6hxYWE479jDlY/exec';
+var CALMA_BOOKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwYuDZlUurp5PATgqM_o3P3pMhk5uxjZDAl5W9uvIIDDzR2I9Oy-MeKSspYZxiZIckR/exec';
 
 document.addEventListener('DOMContentLoaded', function () {
   // Solid nav on scroll (batched with rAF to avoid forced reflow on every scroll tick)
