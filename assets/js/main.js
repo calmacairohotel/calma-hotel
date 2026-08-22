@@ -8,7 +8,7 @@
    PASTE YOUR DEPLOYED APPS SCRIPT WEB APP URL BELOW — see the
    setup guide provided alongside this website.
    ========================================================= */
-var CALMA_BOOKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzhFIjIPY8RgEdzPo8BTAOVf_ng3KLWsyZwaJFGmXoDhV8uw9BfY3IqPRBb3K7QipwE/exec';
+var CALMA_BOOKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwERJfEtKiLqujrXr9jAo5T7Wkzr_K6ARf0RCKjWxdP9QP7aV06RcIl9E0Ay5Bjsk57/exec';
 var WHATSAPP_NUMBER = '201273736667';
 var CALMA_CURRENCY = 'EGP';
 
