@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://calmacairohotel.com/sitemap.xml
