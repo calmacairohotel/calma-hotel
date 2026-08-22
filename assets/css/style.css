@@ -107,6 +107,19 @@ h1,h2,h3,h4{ font-family:var(--display); font-weight:600; margin:0; color:var(--
   padding:7px 16px; font-family:var(--body); font-weight:600;
   font-size:12px; letter-spacing:.06em; text-transform:uppercase;
   white-space:nowrap;
+  max-width:100%; box-sizing:border-box;
+}
+@media (max-width:640px){
+  .save-badge{
+    white-space:normal;
+    text-align:center;
+    border-radius:16px;
+    font-size:10.5px;
+    letter-spacing:.03em;
+    line-height:1.5;
+    padding:10px 16px;
+  }
+  .save-badge svg{ flex-shrink:0; }
 }
 .save-badge svg{ width:14px; height:14px; flex:none; }
 .save-strip{
