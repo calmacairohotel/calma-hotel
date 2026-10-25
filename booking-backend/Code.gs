@@ -1,159 +1,235 @@
 /*************************************************************
- *  CALMA HOTEL — Direct Website Booking Backend  (FIXED)
+ *  CALMA HOTEL — Website backend (bookings + admin panel)
  *  -----------------------------------------------------------
- *  What this script does, every single time a guest submits
- *  the booking form on calmacairohotel.com/contact/ :
+ *  One Google Apps Script web app does everything:
  *
- *   1) Adds ONE new row to a single, permanent Google Sheet
- *      ("Bookings") — every booking ever made through the
- *      website lands in that same sheet, never a new one.
- *   2) Generates a unique booking code for that row (e.g. CLM-00001).
- *   3) Builds a "Gold Card" PDF for that guest — their name,
- *      the booking code, their stay details, and a 15% voucher
- *      for their next stay — and saves it to Google Drive.
- *   4) Puts a clickable link to that PDF in the sheet's
- *      "Gold Card" column, right next to the code, so opening
- *      it is one click.
- *   5) Emails hatemahmedsayedss2233@gmail.com a summary of the
- *      new booking with the Gold Card link included.
+ *   PUBLIC
+ *   • GET  ?action=content   → the live website content (rooms, prices,
+ *                              photos, journeys, settings) edited in /admin/
+ *   • POST {action:'book',…} → saves the booking as a new row in the
+ *                              "Bookings" sheet, gives it a code (CLM-00001),
+ *                              builds the Gold Card PDF and emails the owner.
  *
- *  FIX NOTES (why the old version sometimes skipped the Gold Card):
- *  Google Docs' Apps Script API does NOT support putting a table
- *  inside a cell of another table ("nested tables"). The old code
- *  tried to build the 15%-off banner that way, which throws an
- *  error every time. The error was silently caught, so the booking
- *  still saved and the email still sent — just without a card.
- *  This version builds the banner using plain highlighted text
- *  instead of a nested table, and — if Gold Card generation ever
- *  fails again for any OTHER reason — it now writes the exact
- *  error message into the sheet so it's easy to diagnose instead
- *  of a generic "could not generate" note.
+ *   ADMIN  (password protected — used by calmacairohotel.com/admin/)
+ *   • login, saveContent, uploadImage, listBookings, updateBooking,
+ *     changePassword
  *
- *  SETUP: see "دليل التركيب.md" / SETUP_GUIDE.md that came
- *  with this file — you only need to copy/paste this file once.
- *
- *  TO TEST WITHOUT THE WEBSITE:
- *  In the Apps Script editor, pick "testGoldCard" from the function
- *  dropdown at the top and click ▷ Run. Check View > Execution log —
- *  it prints the PDF link if it worked, or the exact error if not.
+ *  SETUP (once): see SETUP-GUIDE.md next to this file.
+ *  After pasting a new version: Deploy ▸ Manage deployments ▸ Edit ▸
+ *  Version: "New version" ▸ Deploy  (keeps the same URL).
  *************************************************************/
 
 // ---------------------- CONFIG ----------------------
 var OWNER_EMAIL   = 'hatemahmedsayedss2233@gmail.com';
 var SHEET_NAME    = 'Bookings';
 var DRIVE_FOLDER  = 'CALMA Gold Cards';
+var IMAGES_FOLDER = 'CALMA Website Images';
+var CONTENT_FILE  = 'calma-website-content.json';
 var HOTEL_NAME    = 'CALMA Hotel';
 var HOTEL_PHONE   = '+20 12 7373 6667';
 var VOUCHER_PCT   = '15%';
+// First admin password. Change it from the admin panel after the first login
+// (the new one is stored privately in Script Properties and overrides this).
+var DEFAULT_ADMIN_PASSWORD = 'calma2026';
 // ------------------------------------------------------
 
 var SHEET_HEADERS = [
   'Timestamp', 'Booking Code', 'Full Name', 'Phone', 'Email',
   'Check-in', 'Check-out', 'Room Type', 'Guests', 'Message',
-  'Source', 'Status', 'Gold Card'
+  'Source', 'Status', 'Gold Card',
+  'Nights', 'Adults', 'Children', 'Total', 'Arrival', 'Room ID'
 ];
 
-/** Entry point: called automatically whenever the website form is submitted. */
+/** GET: live website content (public) or a health check. */
+function doGet(e) {
+  var action = e && e.parameter && e.parameter.action;
+  if (action === 'content') {
+    return jsonOutput({ status: 'ok', content: readContent() });
+  }
+  return ContentService.createTextOutput('CALMA Hotel website service is running.');
+}
+
+/** POST: bookings from the website + every admin action. */
 function doPost(e) {
+  var data = parseIncoming(e) || {};
+  var action = data.action || 'book';
+  try {
+    if (action === 'book') return jsonOutput(handleBooking(data));
+    if (action === 'login') {
+      if (String(data.password || '') !== getAdminPassword()) return jsonOutput({ status: 'error', message: 'wrong-password' });
+      return jsonOutput({ status: 'ok', token: makeToken() });
+    }
+    if (!checkToken(data.token)) return jsonOutput({ status: 'error', message: 'not-authorised' });
+    if (action === 'saveContent') return jsonOutput(saveContent(data.content));
+    if (action === 'uploadImage') return jsonOutput(uploadImage(data));
+    if (action === 'listBookings') return jsonOutput(listBookings());
+    if (action === 'updateBooking') return jsonOutput(updateBooking(data.row, data.status));
+    if (action === 'changePassword') {
+      if (!data.newPassword || String(data.newPassword).length < 6) return jsonOutput({ status: 'error', message: 'too-short' });
+      PropertiesService.getScriptProperties().setProperty('ADMIN_PASSWORD', String(data.newPassword));
+      return jsonOutput({ status: 'ok' });
+    }
+    return jsonOutput({ status: 'error', message: 'unknown-action' });
+  } catch (err) {
+    return jsonOutput({ status: 'error', message: String(err) });
+  }
+}
+
+// ---------------------- bookings ----------------------
+
+function handleBooking(data) {
   var lock = LockService.getScriptLock();
   lock.waitLock(30000);
   try {
-    var data = parseIncoming(e) || {};
     var sheet = getBookingSheet();
-
     var rowNumber = sheet.getLastRow() + 1;
     var code = 'CLM-' + Utilities.formatString('%05d', rowNumber - 1);
     var timestamp = new Date();
+    var row = {
+      'Timestamp': timestamp, 'Booking Code': code, 'Full Name': data.name || '', 'Phone': data.phone || '', 'Email': data.email || '',
+      'Check-in': data.checkin || '', 'Check-out': data.checkout || '', 'Room Type': data.room || '', 'Guests': data.guests || '',
+      'Message': data.message || '', 'Source': data.source || 'Website', 'Status': 'New', 'Gold Card': '',
+      'Nights': data.nights || '', 'Adults': data.adults || '', 'Children': data.children || '',
+      'Total': data.total ? (data.currency || '') + ' ' + data.total : '', 'Arrival': data.arrival || '', 'Room ID': data.roomId || ''
+    };
+    var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+    sheet.appendRow(headers.map(function (h) { return row.hasOwnProperty(h) ? row[h] : ''; }));
 
-    sheet.appendRow([
-      timestamp,
-      code,
-      data.name || '',
-      data.phone || '',
-      data.email || '',
-      data.checkin || '',
-      data.checkout || '',
-      data.room || '',
-      data.guests || '',
-      data.message || '',
-      data.source || 'Website',
-      'New',
-      '' // Gold Card link/status filled in just below
-    ]);
-
-    // Build the Gold Card PDF and drop a clickable link into the sheet.
     var result = buildGoldCard(code, data, timestamp);
-    var goldCardCell = sheet.getRange(rowNumber, SHEET_HEADERS.indexOf('Gold Card') + 1);
-    if (result.url) {
-      goldCardCell.setFormula('=HYPERLINK("' + result.url + '","Open Gold Card")');
-    } else {
-      // Write the ACTUAL error so it's easy to diagnose, instead of a generic note.
-      goldCardCell.setValue('Failed: ' + result.error);
-    }
+    var goldCardCell = sheet.getRange(rowNumber, headers.indexOf('Gold Card') + 1);
+    if (result.url) goldCardCell.setFormula('=HYPERLINK("' + result.url + '","Open Gold Card")');
+    else goldCardCell.setValue('Failed: ' + result.error);
 
-    notifyOwner(data, code, result.url, timestamp);
-
-    return jsonOutput({ status: 'ok', code: code, goldCard: result.url || ('error: ' + result.error) });
-  } catch (err) {
-    return jsonOutput({ status: 'error', message: String(err) });
+    try { notifyOwner(data, code, result.url, timestamp); } catch (mailErr) { Logger.log(mailErr); }
+    return { status: 'ok', code: code, goldCard: result.url || null };
   } finally {
     lock.releaseLock();
   }
 }
 
-/** Visiting the deployed URL directly just confirms the service is alive. */
-function doGet(e) {
-  return ContentService.createTextOutput(
-    'CALMA Hotel booking service is running. Bookings are received via POST from the website.'
-  );
+function listBookings() {
+  var sheet = getBookingSheet();
+  var last = sheet.getLastRow();
+  if (last < 2) return { status: 'ok', headers: SHEET_HEADERS, rows: [] };
+  var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  var first = Math.max(2, last - 299);
+  var values = sheet.getRange(first, 1, last - first + 1, headers.length).getDisplayValues();
+  var rows = values.map(function (v, i) {
+    var o = { _row: first + i };
+    headers.forEach(function (h, k) { o[h] = v[k]; });
+    return o;
+  }).reverse();
+  return { status: 'ok', headers: headers, rows: rows };
 }
 
-/**
- * Quick manual test — select "testGoldCard" from the function dropdown in
- * the Apps Script editor and click ▷ Run. Check the Execution log: it will
- * print the shareable PDF link if everything works, or the exact error if
- * something (e.g. a missing permission) still needs fixing.
- */
+function updateBooking(row, status) {
+  var allowed = ['New', 'Confirmed', 'Checked-in', 'Completed', 'Cancelled', 'No-show'];
+  if (allowed.indexOf(status) < 0) return { status: 'error', message: 'bad-status' };
+  var sheet = getBookingSheet();
+  var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  row = Number(row);
+  if (!row || row < 2 || row > sheet.getLastRow()) return { status: 'error', message: 'bad-row' };
+  sheet.getRange(row, headers.indexOf('Status') + 1).setValue(status);
+  return { status: 'ok' };
+}
+
+// ---------------------- website content ----------------------
+
+function contentFolder() {
+  var it = DriveApp.getFoldersByName(IMAGES_FOLDER);
+  return it.hasNext() ? it.next() : DriveApp.createFolder(IMAGES_FOLDER);
+}
+
+function readContent() {
+  var cache = CacheService.getScriptCache();
+  var cached = cache.get('content');
+  if (cached) { try { return JSON.parse(cached); } catch (e) {} }
+  var files = DriveApp.getFilesByName(CONTENT_FILE);
+  if (!files.hasNext()) return null;
+  var text = files.next().getBlob().getDataAsString('UTF-8');
+  if (text.length < 95000) cache.put('content', text, 300);
+  return JSON.parse(text);
+}
+
+function saveContent(content) {
+  if (!content || !content.rooms || !content.settings) return { status: 'error', message: 'bad-content' };
+  content.updatedAt = new Date().toISOString();
+  var text = JSON.stringify(content);
+  var files = DriveApp.getFilesByName(CONTENT_FILE);
+  if (files.hasNext()) files.next().setContent(text);
+  else contentFolder().createFile(CONTENT_FILE, text, 'application/json');
+  CacheService.getScriptCache().remove('content');
+  return { status: 'ok', updatedAt: content.updatedAt };
+}
+
+function uploadImage(data) {
+  if (!data.data) return { status: 'error', message: 'no-data' };
+  var bytes = Utilities.base64Decode(String(data.data).replace(/^data:[^,]+,/, ''));
+  var name = (data.name || 'photo') .replace(/[^\w.\-]+/g, '-').slice(0, 60);
+  var blob = Utilities.newBlob(bytes, data.mime || 'image/jpeg', Date.now() + '-' + name);
+  var file = contentFolder().createFile(blob);
+  file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  return { status: 'ok', id: file.getId(), url: 'https://lh3.googleusercontent.com/d/' + file.getId() + '=w1600' };
+}
+
+// ---------------------- admin auth ----------------------
+
+function getAdminPassword() {
+  return PropertiesService.getScriptProperties().getProperty('ADMIN_PASSWORD') || DEFAULT_ADMIN_PASSWORD;
+}
+function tokenSecret() {
+  var p = PropertiesService.getScriptProperties();
+  var s = p.getProperty('TOKEN_SECRET');
+  if (!s) { s = Utilities.getUuid() + Utilities.getUuid(); p.setProperty('TOKEN_SECRET', s); }
+  return s + '|' + getAdminPassword(); // changing the password logs everyone out
+}
+function sign(text) {
+  return Utilities.base64EncodeWebSafe(Utilities.computeHmacSha256Signature(text, tokenSecret()));
+}
+function makeToken() {
+  var exp = String(Date.now() + 7 * 24 * 3600 * 1000); // valid for 7 days
+  return exp + '.' + sign(exp);
+}
+function checkToken(token) {
+  if (!token) return false;
+  var parts = String(token).split('.');
+  if (parts.length !== 2 || Number(parts[0]) < Date.now()) return false;
+  return sign(parts[0]) === parts[1];
+}
+
+/** Quick manual test of the booking + Gold Card flow (Run ▷ in the editor). */
 function testGoldCard() {
   var result = buildGoldCard('TEST-00000', {
-    name: 'Test Guest',
-    phone: '+20 100 000 0000',
-    email: 'test@example.com',
-    checkin: '2026-09-01',
-    checkout: '2026-09-03',
-    room: 'Deluxe Double Room',
-    guests: 2
+    name: 'Test Guest', phone: '+20 100 000 0000', email: 'test@example.com',
+    checkin: '2026-09-01', checkout: '2026-09-03', room: 'Deluxe Double Room', guests: 2
   }, new Date());
-
-  if (result.url) {
-    Logger.log('SUCCESS — Gold Card URL: ' + result.url);
-  } else {
-    Logger.log('FAILED — error was: ' + result.error);
-  }
+  Logger.log(result.url ? ('SUCCESS — Gold Card URL: ' + result.url) : ('FAILED — error was: ' + result.error));
 }
 
 // ---------------------- helpers ----------------------
 
 function parseIncoming(e) {
-  // Website sends JSON as text/plain to avoid CORS preflight issues.
+  // The website sends JSON as text/plain to avoid CORS preflight issues.
   if (e && e.postData && e.postData.contents) {
     try { return JSON.parse(e.postData.contents); } catch (err) { /* fall through */ }
   }
-  // Fallback: classic form-encoded POST.
   return (e && e.parameter) ? e.parameter : {};
 }
 
 function getBookingSheet() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName(SHEET_NAME);
-  if (!sheet) {
-    sheet = ss.insertSheet(SHEET_NAME);
-  }
+  var sheet = ss.getSheetByName(SHEET_NAME) || ss.insertSheet(SHEET_NAME);
   if (sheet.getLastRow() === 0) {
     sheet.appendRow(SHEET_HEADERS);
-    sheet.getRange(1, 1, 1, SHEET_HEADERS.length).setFontWeight('bold');
-    sheet.setFrozenRows(1);
+  } else {
+    // add any new columns (Nights, Total, …) to an existing sheet without touching old rows
+    var have = sheet.getRange(1, 1, 1, Math.max(1, sheet.getLastColumn())).getValues()[0];
+    SHEET_HEADERS.forEach(function (h) {
+      if (have.indexOf(h) < 0) { sheet.getRange(1, have.length + 1).setValue(h); have.push(h); }
+    });
   }
+  sheet.getRange(1, 1, 1, sheet.getLastColumn()).setFontWeight('bold');
+  sheet.setFrozenRows(1);
   return sheet;
 }
 
@@ -164,31 +240,30 @@ function getGoldCardFolder() {
 
 function notifyOwner(data, code, cardUrl, timestamp) {
   data = data || {};
-  var subject = 'New Direct Booking — ' + HOTEL_NAME + ' (' + code + ')';
+  var subject = 'New website booking — ' + HOTEL_NAME + ' (' + code + ')';
   var lines = [
-    'A new booking request just came in from the website.',
-    '',
+    'A new booking request just came in from the website.', '',
     'Booking Code: ' + code,
     'Name: ' + (data.name || '-'),
     'Phone: ' + (data.phone || '-'),
     'Email: ' + (data.email || '-'),
-    'Check-in: ' + (data.checkin || '-'),
-    'Check-out: ' + (data.checkout || '-'),
     'Room: ' + (data.room || '-'),
-    'Guests: ' + (data.guests || '-'),
-    'Message: ' + (data.message || '-'),
-    'Received: ' + timestamp,
-    '',
-    cardUrl ? ('Gold Card (15% voucher) PDF: ' + cardUrl) : 'Gold Card could not be generated automatically — check the sheet for the error, or re-run testGoldCard().',
-    '',
+    'Check-in: ' + (data.checkin || '-'),
+    'Check-out: ' + (data.checkout || '-') + (data.nights ? ' (' + data.nights + ' nights)' : ''),
+    'Guests: ' + (data.adults || data.guests || '-') + ' adults' + (data.children ? ', ' + data.children + ' children' : ''),
+    'Total: ' + (data.total ? (data.currency || '') + ' ' + data.total : 'price on request'),
+    'Arrival: ' + (data.arrival || '-'),
+    'Notes: ' + (data.message || '-'),
+    'Received: ' + timestamp, '',
+    cardUrl ? ('Gold Card (15% voucher) PDF: ' + cardUrl) : 'Gold Card could not be generated automatically — check the sheet for the error.', '',
+    'Manage bookings: https://calmacairohotel.com/admin/',
     'Full record: ' + SpreadsheetApp.getActiveSpreadsheet().getUrl()
   ];
   MailApp.sendEmail(OWNER_EMAIL, subject, lines.join('\n'));
 }
 
 function jsonOutput(obj) {
-  return ContentService.createTextOutput(JSON.stringify(obj))
-    .setMimeType(ContentService.MimeType.JSON);
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
 }
 
 /**

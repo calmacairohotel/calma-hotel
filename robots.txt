@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /book/
 
 Sitemap: https://calmacairohotel.com/sitemap.xml
