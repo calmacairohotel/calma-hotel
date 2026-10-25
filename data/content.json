@@ -16,105 +16,386 @@
     "announcement": "",
     "checkinTime": "",
     "checkoutTime": "",
-    "heroImages": ["/assets/img/h/w-lobby.jpg", "/assets/img/h/double-1.jpg", "/assets/img/h/balcony-view.jpg", "/assets/img/h/family-1.jpg"],
+    "heroImages": [
+      "/assets/img/h/lobby-reception.jpg",
+      "/assets/img/h/double-1.jpg",
+      "/assets/img/h/balcony-view.jpg",
+      "/assets/img/h/family-1.jpg"
+    ],
     "instagram": "https://www.instagram.com/calma__hotel/",
     "facebook": "https://web.facebook.com/profile.php?id=61592420100358",
     "tiktok": "https://www.tiktok.com/@calma__hotel"
   },
   "rooms": [
     {
-      "id": "deluxe-double", "name": "Deluxe Double Room", "category": "Double",
+      "id": "deluxe-double",
+      "name": "Deluxe Double Room",
+      "category": "Double",
       "short": "One double bed, a work corner and big windows over Downtown.",
       "description": "A generous double bed, a proper desk for slow mornings with a laptop, and deeper, softer furnishings throughout. Built for couples and for guests who want a little more room to settle in.",
-      "beds": "1 double bed", "maxGuests": 2, "size": "", "price": null, "otaPrice": null,
-      "amenities": ["Private bathroom", "Air conditioning", "Smart TV", "Work desk", "Free Wi-Fi", "Blackout curtains"],
-      "images": ["/assets/img/h/double-1.jpg", "/assets/img/h/double-2.jpg", "/assets/img/h/double-3.jpg", "/assets/img/h/double-4.jpg", "/assets/img/h/balcony-view-2.jpg", "/assets/img/h/bath-1.jpg"],
-      "visible": true, "blocked": []
+      "beds": "1 double bed",
+      "maxGuests": 2,
+      "size": "",
+      "price": null,
+      "otaPrice": null,
+      "amenities": [
+        "Private bathroom",
+        "Air conditioning",
+        "Smart TV",
+        "Work desk",
+        "Free Wi-Fi",
+        "Blackout curtains"
+      ],
+      "images": [
+        "/assets/img/h/double-1.jpg",
+        "/assets/img/h/double-2.jpg",
+        "/assets/img/h/double-3.jpg",
+        "/assets/img/h/double-4.jpg",
+        "/assets/img/h/balcony-view-2.jpg",
+        "/assets/img/h/bath-1.jpg"
+      ],
+      "visible": true,
+      "blocked": []
     },
     {
-      "id": "classic-twin", "name": "Classic Twin Room", "category": "Twin",
+      "id": "classic-twin",
+      "name": "Classic Twin Room",
+      "category": "Twin",
       "short": "Two beds, warm wood and tall windows — ideal for friends.",
       "description": "Two beds beneath tall shuttered windows, framed art and a warm wood headboard wall. Our most requested room for friends travelling together, and for guests who like a little more space either side of the bed.",
-      "beds": "2 beds", "maxGuests": 2, "size": "", "price": null, "otaPrice": null,
-      "amenities": ["Private bathroom", "Air conditioning", "Smart TV", "Free Wi-Fi", "City-facing window"],
-      "images": ["/assets/img/h/twin-1.jpg", "/assets/img/h/twin-2.jpg", "/assets/img/h/balcony-door-2.jpg", "/assets/img/h/bath-2.jpg"],
-      "visible": true, "blocked": []
+      "beds": "2 beds",
+      "maxGuests": 2,
+      "size": "",
+      "price": null,
+      "otaPrice": null,
+      "amenities": [
+        "Private bathroom",
+        "Air conditioning",
+        "Smart TV",
+        "Free Wi-Fi",
+        "City-facing window"
+      ],
+      "images": [
+        "/assets/img/h/twin-1.jpg",
+        "/assets/img/h/twin-2.jpg",
+        "/assets/img/h/balcony-door-2.jpg",
+        "/assets/img/h/bath-2.jpg"
+      ],
+      "visible": true,
+      "blocked": []
     },
     {
-      "id": "triple", "name": "Triple Room", "category": "Triple",
+      "id": "triple",
+      "name": "Triple Room",
+      "category": "Triple",
       "short": "Three single beds in one warm room — friends or a small family.",
       "description": "Three beds dressed in warm linens beneath soft brass wall lighting. Built for three friends or a small family who would rather share one warm room than split across two.",
-      "beds": "3 single beds", "maxGuests": 3, "size": "", "price": null, "otaPrice": null,
-      "amenities": ["Private bathroom", "Air conditioning", "Smart TV", "Free Wi-Fi", "Wardrobe"],
-      "images": ["/assets/img/h/triple-1.jpg", "/assets/img/h/triple-2.jpg", "/assets/img/h/triple-3.jpg", "/assets/img/h/triple-4.jpg", "/assets/img/h/triple-5.jpg", "/assets/img/h/shower.jpg"],
-      "visible": true, "blocked": []
+      "beds": "3 single beds",
+      "maxGuests": 3,
+      "size": "",
+      "price": null,
+      "otaPrice": null,
+      "amenities": [
+        "Private bathroom",
+        "Air conditioning",
+        "Smart TV",
+        "Free Wi-Fi",
+        "Wardrobe"
+      ],
+      "images": [
+        "/assets/img/h/triple-1.jpg",
+        "/assets/img/h/triple-2.jpg",
+        "/assets/img/h/triple-3.jpg",
+        "/assets/img/h/triple-4.jpg",
+        "/assets/img/h/triple-5.jpg",
+        "/assets/img/h/shower.jpg"
+      ],
+      "visible": true,
+      "blocked": []
     },
     {
-      "id": "family", "name": "Family Room", "category": "Family",
+      "id": "family",
+      "name": "Family Room",
+      "category": "Family",
       "short": "Four beds, space to spread out and a big window.",
       "description": "Multiple beds set within one warm, wood-floored room — comfortable enough for a family or a small group to share without feeling crowded, with full-length curtains to keep it restful even in daylight.",
-      "beds": "4 beds", "maxGuests": 4, "size": "", "price": null, "otaPrice": null,
-      "amenities": ["Private bathroom", "Air conditioning", "Smart TV", "Free Wi-Fi", "Extra storage", "Work desk"],
-      "images": ["/assets/img/h/family-1.jpg", "/assets/img/h/family-2.jpg", "/assets/img/h/family-3.jpg", "/assets/img/h/family-4.jpg", "/assets/img/h/family-5.jpg", "/assets/img/h/bath-modern.jpg"],
-      "visible": true, "blocked": []
+      "beds": "4 beds",
+      "maxGuests": 4,
+      "size": "",
+      "price": null,
+      "otaPrice": null,
+      "amenities": [
+        "Private bathroom",
+        "Air conditioning",
+        "Smart TV",
+        "Free Wi-Fi",
+        "Extra storage",
+        "Work desk"
+      ],
+      "images": [
+        "/assets/img/h/family-1.jpg",
+        "/assets/img/h/family-2.jpg",
+        "/assets/img/h/family-3.jpg",
+        "/assets/img/h/family-4.jpg",
+        "/assets/img/h/family-5.jpg",
+        "/assets/img/h/bath-modern.jpg"
+      ],
+      "visible": true,
+      "blocked": []
     },
     {
-      "id": "modern-suite", "name": "Modern Suite", "category": "Suite",
+      "id": "modern-suite",
+      "name": "Modern Suite",
+      "category": "Suite",
       "short": "Double bed, sitting corner and our most contemporary finish.",
       "description": "Our most contemporary stay — clean lines, a small round table for breakfast in the room, a backlit vanity and low, warm lighting throughout.",
-      "beds": "1 double bed", "maxGuests": 2, "size": "", "price": null, "otaPrice": null,
-      "amenities": ["Private bathroom", "Air conditioning", "Smart TV", "Free Wi-Fi", "Sitting corner", "Backlit vanity"],
-      "images": ["/assets/img/h/suite-1.jpg", "/assets/img/h/suite-2.jpg", "/assets/img/h/suite-3.jpg", "/assets/img/h/room-wardrobe.jpg", "/assets/img/h/bath-modern.jpg"],
-      "visible": true, "blocked": []
+      "beds": "1 double bed",
+      "maxGuests": 2,
+      "size": "",
+      "price": null,
+      "otaPrice": null,
+      "amenities": [
+        "Private bathroom",
+        "Air conditioning",
+        "Smart TV",
+        "Free Wi-Fi",
+        "Sitting corner",
+        "Backlit vanity"
+      ],
+      "images": [
+        "/assets/img/h/suite-1.jpg",
+        "/assets/img/h/suite-2.jpg",
+        "/assets/img/h/suite-3.jpg",
+        "/assets/img/h/room-wardrobe.jpg",
+        "/assets/img/h/bath-modern.jpg"
+      ],
+      "visible": true,
+      "blocked": []
     }
   ],
   "gallery": [
-    { "src": "/assets/img/h/lobby-reception.jpg", "cat": "Lobby", "alt": "Reception desk with the CALMA emblem" },
-    { "src": "/assets/img/h/entrance.jpg", "cat": "Lobby", "alt": "Glass entrance door with the CALMA logo" },
-    { "src": "/assets/img/h/lobby-hall.jpg", "cat": "Lobby", "alt": "Marble lobby hall" },
-    { "src": "/assets/img/h/staircase.jpg", "cat": "Lobby", "alt": "Staircase at the hotel entrance" },
-    { "src": "/assets/img/h/lounge.jpg", "cat": "Lobby", "alt": "Lounge corner with pink chairs" },
-    { "src": "/assets/img/h/corridor.jpg", "cat": "Lobby", "alt": "Marble corridor" },
-    { "src": "/assets/img/h/double-1.jpg", "cat": "Rooms", "alt": "Deluxe Double Room with city window" },
-    { "src": "/assets/img/h/triple-1.jpg", "cat": "Rooms", "alt": "Triple Room" },
-    { "src": "/assets/img/h/family-1.jpg", "cat": "Rooms", "alt": "Family Room" },
-    { "src": "/assets/img/h/suite-1.jpg", "cat": "Rooms", "alt": "Modern Suite with sitting corner" },
-    { "src": "/assets/img/h/twin-1.jpg", "cat": "Rooms", "alt": "Classic Twin Room" },
-    { "src": "/assets/img/h/double-3.jpg", "cat": "Rooms", "alt": "Double room with desk and TV" },
-    { "src": "/assets/img/h/single-1.jpg", "cat": "Rooms", "alt": "Room entrance with vanity" },
-    { "src": "/assets/img/h/bath-modern.jpg", "cat": "Bathrooms", "alt": "Marble bathroom with glass shower" },
-    { "src": "/assets/img/h/bath-1.jpg", "cat": "Bathrooms", "alt": "Bathroom with walk-in shower" },
-    { "src": "/assets/img/h/bath-2.jpg", "cat": "Bathrooms", "alt": "Bathroom with brass fittings" },
-    { "src": "/assets/img/h/shower.jpg", "cat": "Bathrooms", "alt": "Rain shower" },
-    { "src": "/assets/img/h/balcony-view.jpg", "cat": "Views", "alt": "Balcony view over Downtown Cairo" },
-    { "src": "/assets/img/h/balcony-view-2.jpg", "cat": "Views", "alt": "Sunset view from a room balcony" },
-    { "src": "/assets/img/h/sunroom.jpg", "cat": "Views", "alt": "Sunroom terrace with city views" },
-    { "src": "/assets/img/h/balcony-door.jpg", "cat": "Views", "alt": "Room opening onto the sunroom" }
+    {
+      "src": "/assets/img/h/lobby-reception.jpg",
+      "cat": "Lobby",
+      "alt": "Reception desk with the CALMA emblem"
+    },
+    {
+      "src": "/assets/img/h/entrance.jpg",
+      "cat": "Lobby",
+      "alt": "Glass entrance door with the CALMA logo"
+    },
+    {
+      "src": "/assets/img/h/lobby-hall.jpg",
+      "cat": "Lobby",
+      "alt": "Marble lobby hall"
+    },
+    {
+      "src": "/assets/img/h/staircase.jpg",
+      "cat": "Lobby",
+      "alt": "Staircase at the hotel entrance"
+    },
+    {
+      "src": "/assets/img/h/lounge.jpg",
+      "cat": "Lobby",
+      "alt": "Lounge corner with pink chairs"
+    },
+    {
+      "src": "/assets/img/h/corridor.jpg",
+      "cat": "Lobby",
+      "alt": "Marble corridor"
+    },
+    {
+      "src": "/assets/img/h/double-1.jpg",
+      "cat": "Rooms",
+      "alt": "Deluxe Double Room with city window"
+    },
+    {
+      "src": "/assets/img/h/triple-1.jpg",
+      "cat": "Rooms",
+      "alt": "Triple Room"
+    },
+    {
+      "src": "/assets/img/h/family-1.jpg",
+      "cat": "Rooms",
+      "alt": "Family Room"
+    },
+    {
+      "src": "/assets/img/h/suite-1.jpg",
+      "cat": "Rooms",
+      "alt": "Modern Suite with sitting corner"
+    },
+    {
+      "src": "/assets/img/h/twin-1.jpg",
+      "cat": "Rooms",
+      "alt": "Classic Twin Room"
+    },
+    {
+      "src": "/assets/img/h/double-3.jpg",
+      "cat": "Rooms",
+      "alt": "Double room with desk and TV"
+    },
+    {
+      "src": "/assets/img/h/single-1.jpg",
+      "cat": "Rooms",
+      "alt": "Room entrance with vanity"
+    },
+    {
+      "src": "/assets/img/h/bath-modern.jpg",
+      "cat": "Bathrooms",
+      "alt": "Marble bathroom with glass shower"
+    },
+    {
+      "src": "/assets/img/h/bath-1.jpg",
+      "cat": "Bathrooms",
+      "alt": "Bathroom with walk-in shower"
+    },
+    {
+      "src": "/assets/img/h/bath-2.jpg",
+      "cat": "Bathrooms",
+      "alt": "Bathroom with brass fittings"
+    },
+    {
+      "src": "/assets/img/h/shower.jpg",
+      "cat": "Bathrooms",
+      "alt": "Rain shower"
+    },
+    {
+      "src": "/assets/img/h/balcony-view.jpg",
+      "cat": "Views",
+      "alt": "Balcony view over Downtown Cairo"
+    },
+    {
+      "src": "/assets/img/h/balcony-view-2.jpg",
+      "cat": "Views",
+      "alt": "Sunset view from a room balcony"
+    },
+    {
+      "src": "/assets/img/h/sunroom.jpg",
+      "cat": "Views",
+      "alt": "Sunroom terrace with city views"
+    },
+    {
+      "src": "/assets/img/h/balcony-door.jpg",
+      "cat": "Views",
+      "alt": "Room opening onto the sunroom"
+    }
   ],
   "amenities": [
-    { "icon": "wifi", "title": "Free fast Wi-Fi", "text": "Reliable connection in every room and corridor." },
-    { "icon": "clock", "title": "24-hour reception", "text": "A warm welcome at any hour, from a team that knows the city." },
-    { "icon": "car", "title": "Airport transfer", "text": "Private pickup arranged ahead of your arrival." },
-    { "icon": "coffee", "title": "Breakfast", "text": "Fresh fruit, eggs and local pastries, on request." },
-    { "icon": "snow", "title": "Air conditioning", "text": "Individually controlled in every room." },
-    { "icon": "tv", "title": "Smart TV", "text": "Streaming-ready television in every room." },
-    { "icon": "pin", "title": "Downtown location", "text": "In the heart of Downtown Cairo, close to cafés and shops." },
-    { "icon": "map", "title": "Day trips", "text": "Pyramids, Old Cairo and the Nile — planned by our team." }
+    {
+      "icon": "wifi",
+      "title": "Free fast Wi-Fi",
+      "text": "Reliable connection in every room and corridor."
+    },
+    {
+      "icon": "clock",
+      "title": "24-hour reception",
+      "text": "A warm welcome at any hour, from a team that knows the city."
+    },
+    {
+      "icon": "car",
+      "title": "Airport transfer",
+      "text": "Private pickup arranged ahead of your arrival."
+    },
+    {
+      "icon": "coffee",
+      "title": "Breakfast",
+      "text": "Fresh fruit, eggs and local pastries, on request."
+    },
+    {
+      "icon": "snow",
+      "title": "Air conditioning",
+      "text": "Individually controlled in every room."
+    },
+    {
+      "icon": "tv",
+      "title": "Smart TV",
+      "text": "Streaming-ready television in every room."
+    },
+    {
+      "icon": "pin",
+      "title": "Downtown location",
+      "text": "In the heart of Downtown Cairo, close to cafés and shops."
+    },
+    {
+      "icon": "map",
+      "title": "Day trips",
+      "text": "Pyramids, Old Cairo and the Nile — planned by our team."
+    }
   ],
   "journeys": [
-    { "id": "welcome-package", "title": "The Calm Welcome", "type": "Arrival program", "duration": "On arrival", "image": "/assets/img/h/w-reception.jpg", "description": "We track your flight, arrange a private pickup from Cairo International Airport, and have your room ready — followed by a short orientation of the neighbourhood.", "price": null, "visible": true },
-    { "id": "giza-saqqara", "title": "Pyramids & Saqqara", "type": "Full day", "duration": "Approx. 8 hours", "image": "/assets/img/pyramids-giza.jpg", "description": "The Giza Plateau and the quieter Step Pyramid at Saqqara with a private, licensed guide and a driver who paces the day sensibly. Lunch at a local restaurant along the way.", "price": null, "visible": true },
-    { "id": "islamic-cairo", "title": "Old Cairo on Foot", "type": "Half day", "duration": "Approx. 4 hours", "image": "/assets/img/old-cairo-night.jpg", "description": "A walking route through Islamic Cairo's minarets and stone alleys, ending at Khan El Khalili for tea and a slow browse through the market.", "price": null, "visible": true },
-    { "id": "egyptian-museum", "title": "Egyptian Museum, Properly Explained", "type": "Half day", "duration": "Approx. 3 hours", "image": "/assets/img/egyptian-museum.jpg", "description": "Our guide narrows the collection down to the pieces worth your time, including the Tutankhamun treasures, and explains the history in plain terms.", "price": null, "visible": true },
-    { "id": "nile-sunset", "title": "Evening on the Nile", "type": "Evening", "duration": "Approx. 1.5 hours", "image": "/assets/img/nile-cruise.jpg", "description": "A quiet hour on the water as the city's light softens — a gentle way to close a busy day of sightseeing.", "price": null, "visible": true }
+    {
+      "id": "welcome-package",
+      "title": "The Calm Welcome",
+      "type": "Arrival program",
+      "duration": "On arrival",
+      "image": "/assets/img/h/entrance.jpg",
+      "description": "We track your flight, arrange a private pickup from Cairo International Airport, and have your room ready — followed by a short orientation of the neighbourhood.",
+      "price": null,
+      "visible": true
+    },
+    {
+      "id": "giza-saqqara",
+      "title": "Pyramids & Saqqara",
+      "type": "Full day",
+      "duration": "Approx. 8 hours",
+      "image": "/assets/img/pyramids-giza.jpg",
+      "description": "The Giza Plateau and the quieter Step Pyramid at Saqqara with a private, licensed guide and a driver who paces the day sensibly. Lunch at a local restaurant along the way.",
+      "price": null,
+      "visible": true
+    },
+    {
+      "id": "islamic-cairo",
+      "title": "Old Cairo on Foot",
+      "type": "Half day",
+      "duration": "Approx. 4 hours",
+      "image": "/assets/img/old-cairo-night.jpg",
+      "description": "A walking route through Islamic Cairo's minarets and stone alleys, ending at Khan El Khalili for tea and a slow browse through the market.",
+      "price": null,
+      "visible": true
+    },
+    {
+      "id": "egyptian-museum",
+      "title": "Egyptian Museum, Properly Explained",
+      "type": "Half day",
+      "duration": "Approx. 3 hours",
+      "image": "/assets/img/egyptian-museum.jpg",
+      "description": "Our guide narrows the collection down to the pieces worth your time, including the Tutankhamun treasures, and explains the history in plain terms.",
+      "price": null,
+      "visible": true
+    },
+    {
+      "id": "nile-sunset",
+      "title": "Evening on the Nile",
+      "type": "Evening",
+      "duration": "Approx. 1.5 hours",
+      "image": "/assets/img/nile-cruise.jpg",
+      "description": "A quiet hour on the water as the city's light softens — a gentle way to close a busy day of sightseeing.",
+      "price": null,
+      "visible": true
+    }
   ],
   "reviews": [
-    { "text": "The kind of stay that resets you before you've even unpacked — quiet, warm, and genuinely well looked after.", "author": "A recent guest" }
+    {
+      "text": "The kind of stay that resets you before you've even unpacked — quiet, warm, and genuinely well looked after.",
+      "author": "A recent guest"
+    }
   ],
   "faq": [
-    { "q": "How do I book?", "a": "Choose your dates and guests, pick a room and send your details. You get a booking code instantly and our team confirms on WhatsApp." },
-    { "q": "Do I pay online?", "a": "No card is needed to send a booking request. Our team confirms availability and payment details with you directly." },
-    { "q": "Why book direct instead of Booking.com?", "a": "Same rooms and the same service, without the platform commission — so you pay less when you book on this website." },
-    { "q": "Can you arrange an airport pickup?", "a": "Yes. Add it in the notes when you book, or message us on WhatsApp with your flight details." }
+    {
+      "q": "How do I book?",
+      "a": "Choose your dates and guests, pick a room and send your details. You get a booking code instantly and our team confirms on WhatsApp."
+    },
+    {
+      "q": "Do I pay online?",
+      "a": "No card is needed to send a booking request. Our team confirms availability and payment details with you directly."
+    },
+    {
+      "q": "Why book direct instead of Booking.com?",
+      "a": "Same rooms and the same service, without the platform commission — so you pay less when you book on this website."
+    },
+    {
+      "q": "Can you arrange an airport pickup?",
+      "a": "Yes. Add it in the notes when you book, or message us on WhatsApp with your flight details."
+    }
   ]
 }
