@@ -64,6 +64,9 @@ var CALMA_BOOKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyAoC2Xdxf
     chat: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 11.5a8.4 8.4 0 0 1-12.3 7.4L3 20l1.2-5.4A8.5 8.5 0 1 1 21 11.5z"/></svg>',
     shirt: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 3 3 6l2 5 3-1v11h8V10l3 1 2-5-5-3a4 4 0 0 1-8 0z"/></svg>',
     eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+    cup: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9h13v5a6 6 0 0 1-6 6h-1a6 6 0 0 1-6-6z"/><path d="M17 11h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8 3c-1 1 1 2 0 3M12 3c-1 1 1 2 0 3"/></svg>',
+    drop: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/><path d="M9.5 14.5a2.5 2.5 0 0 0 2.5 2.5"/></svg>',
+    parking: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9.5 17V7h3.5a3 3 0 0 1 0 6H9.5"/></svg>',
     star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2l3 6.6 7 .7-5.3 4.8 1.6 7L12 17.6 5.7 21.1l1.6-7L2 9.3l7-.7z"/></svg>',
     wifi: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 8.8a16 16 0 0 1 20 0"/><path d="M5 12.6a11 11 0 0 1 14 0"/><path d="M8.5 16.4a6 6 0 0 1 7 0"/><circle cx="12" cy="20" r="1"/></svg>',
     clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>',
@@ -329,7 +332,7 @@ var CALMA_BOOKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyAoC2Xdxf
   function roomsPage() {
     var main = $('#main'), rooms = visibleRooms();
     var cats = ['All rooms'].concat(rooms.map(function (r) { return r.category; }).filter(function (c, i, a) { return a.indexOf(c) === i; }));
-    main.innerHTML = '<section class="phead"><div class="wrap"><div class="crumbs"><a href="/">Home</a> / Rooms</div><h1>Rooms &amp; prices</h1><p>' + rooms.length + ' room types. Every room includes breakfast, air conditioning, free Wi-Fi, housekeeping, laundry service and 24-hour reception. ' + esc(C.settings.directDiscountText || '') + '.</p>' + searchbar() + '</div></section>' +
+    main.innerHTML = '<section class="phead"><div class="wrap"><div class="crumbs"><a href="/">Home</a> / Rooms</div><h1>Rooms &amp; prices</h1><p>' + rooms.length + ' room types. Every room includes breakfast, air conditioning, hot water, a TV, free Wi-Fi, housekeeping, laundry service and 24-hour reception. ' + esc(C.settings.directDiscountText || '') + '.</p>' + searchbar() + '</div></section>' +
       '<section class="section" style="padding-top:20px"><div class="wrap"><div class="filters">' + cats.map(function (c, i) { return '<button class="tab' + (i ? '' : ' on') + '" data-f="' + esc(c) + '">' + esc(c) + '</button>'; }).join('') +
       '<button class="tab" data-g="3">3+ guests</button></div><div id="rlist">' +
       rooms.map(function (r) {

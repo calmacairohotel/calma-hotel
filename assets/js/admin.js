@@ -597,7 +597,7 @@ var CALMA_BOOKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyAoC2Xdxf
   }
 
   /* ---------------- AMENITIES / FAQ / REVIEWS ---------------- */
-  var ICONS = ['wifi', 'clock', 'car', 'coffee', 'snow', 'tv', 'pin', 'map', 'shield', 'star', 'chat', 'bed'];
+  var ICONS = ['wifi', 'clock', 'car', 'coffee', 'cup', 'snow', 'drop', 'tv', 'parking', 'shirt', 'pin', 'map', 'shield', 'star', 'chat', 'bed'];
   function vTexts(v) {
     var listEd = function (key, title, hint, fields, blank) {
       return '<div class="card"><div class="row"><h3>' + title + '</h3><span class="sp"></span><button class="btn sm" data-add="' + key + '">＋ إضافة</button></div><p class="hint">' + hint + '</p>' +

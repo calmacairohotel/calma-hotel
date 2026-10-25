@@ -49,6 +49,7 @@
         "Laundry service",
         "24-hour reception",
         "Private bathroom",
+        "Hot water",
         "Smart TV",
         "Street view — window or balcony"
       ],
@@ -87,6 +88,7 @@
         "Laundry service",
         "24-hour reception",
         "Private bathroom",
+        "Hot water",
         "Smart TV",
         "Work desk",
         "Street view — window or balcony"
@@ -129,6 +131,7 @@
         "Laundry service",
         "24-hour reception",
         "Private bathroom",
+        "Hot water",
         "Smart TV",
         "City-facing window"
       ],
@@ -169,6 +172,7 @@
         "Laundry service",
         "24-hour reception",
         "Private bathroom",
+        "Hot water",
         "Smart TV",
         "Street view — window or balcony"
       ],
@@ -184,6 +188,47 @@
       "blocked": [],
       "view": "Street view — window or balcony",
       "breakfast": true,
+      "inventory": null,
+      "minNights": null,
+      "maxNights": null,
+      "baseOcc": null,
+      "extraAdult": null,
+      "childFee": null,
+      "rates": {}
+    },
+    {
+      "id": "luxury-triple",
+      "name": "Luxury Triple Room",
+      "category": "Triple",
+      "short": "Three beds, upgraded finishes and a window or balcony onto the street.",
+      "description": "Our most refined room for three. Three comfortable beds dressed in premium linens, warm brass lighting and upgraded finishes throughout — with plenty of space to settle in. A window or balcony opens onto the street, and every stay includes breakfast, daily housekeeping, laundry service and our 24-hour reception. Ideal for friends or a small family who want a little more comfort.",
+      "beds": "3 beds",
+      "view": "Street view — window or balcony",
+      "maxGuests": 3,
+      "size": "",
+      "price": null,
+      "otaPrice": null,
+      "breakfast": true,
+      "amenities": [
+        "Breakfast included",
+        "Air conditioning",
+        "Free Wi-Fi",
+        "Housekeeping",
+        "Laundry service",
+        "24-hour reception",
+        "Private bathroom",
+        "Hot water",
+        "Smart TV",
+        "Street view — window or balcony"
+      ],
+      "images": [
+        "/assets/img/h/triple-4.jpg",
+        "/assets/img/h/triple-5.jpg",
+        "/assets/img/h/triple-3.jpg",
+        "/assets/img/h/bath-modern.jpg"
+      ],
+      "visible": true,
+      "blocked": [],
       "inventory": null,
       "minNights": null,
       "maxNights": null,
@@ -211,6 +256,7 @@
         "Laundry service",
         "24-hour reception",
         "Private bathroom",
+        "Hot water",
         "Smart TV",
         "Extra storage",
         "Work desk"
@@ -254,6 +300,7 @@
         "Laundry service",
         "24-hour reception",
         "Private bathroom",
+        "Hot water",
         "Smart TV",
         "Sitting corner",
         "Backlit vanity"
@@ -392,14 +439,24 @@
       "text": "A warm welcome at any hour, from a team that knows the city."
     },
     {
+      "icon": "cup",
+      "title": "Cafeteria",
+      "text": "Coffee, tea, drinks and light bites in-house, whenever you need them."
+    },
+    {
       "icon": "wifi",
       "title": "Free Wi-Fi",
       "text": "Fast, reliable connection in every room."
     },
     {
-      "icon": "snow",
-      "title": "Air conditioning",
-      "text": "Individually controlled in every room."
+      "icon": "drop",
+      "title": "A/C & hot water",
+      "text": "Air conditioning and hot water around the clock in every room."
+    },
+    {
+      "icon": "tv",
+      "title": "TV in every room",
+      "text": "A TV in every room to unwind after a day out."
     },
     {
       "icon": "star",
@@ -412,14 +469,24 @@
       "text": "Hand us your laundry — we take care of the rest."
     },
     {
+      "icon": "car",
+      "title": "Airport transfer",
+      "text": "Private pickup and drop-off arranged ahead of your trip."
+    },
+    {
+      "icon": "map",
+      "title": "Trips & tours",
+      "text": "Pyramids, Old Cairo and the Nile — planned by our team."
+    },
+    {
+      "icon": "parking",
+      "title": "Parking nearby",
+      "text": "Public parking a short walk from the hotel."
+    },
+    {
       "icon": "pin",
       "title": "On the street, in Downtown",
       "text": "Single, double and triple rooms face the street — window or balcony."
-    },
-    {
-      "icon": "car",
-      "title": "Airport transfer",
-      "text": "Private pickup arranged ahead of your arrival."
     }
   ],
   "journeys": [
@@ -487,7 +554,7 @@
     },
     {
       "q": "What is included in the price?",
-      "a": "Every room includes breakfast, air conditioning, free Wi-Fi, housekeeping, laundry service and our 24-hour reception."
+      "a": "Every room includes breakfast, air conditioning, hot water, a TV, free Wi-Fi, housekeeping, laundry service and our 24-hour reception."
     },
     {
       "q": "Do the rooms have a view?",
@@ -504,6 +571,14 @@
     {
       "q": "Can you arrange an airport pickup?",
       "a": "Yes. Add it in the notes when you book, or message us on WhatsApp with your flight details."
+    },
+    {
+      "q": "Is there parking?",
+      "a": "There is no parking at the hotel itself, but there is public parking close by — ask reception and we will point you to it."
+    },
+    {
+      "q": "Do you organise trips?",
+      "a": "Yes — airport transfers and day trips to the Pyramids, Old Cairo, the Egyptian Museum and the Nile. Ask us on WhatsApp or at reception."
     }
   ],
   "ratePlans": [
