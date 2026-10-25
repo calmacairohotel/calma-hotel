@@ -11,6 +11,7 @@ var CALMA_BOOKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyAoC2Xdxf
 (function () {
   'use strict';
   var C = null;                 // current content
+  var CP = window.CalmaPricing;  // shared pricing engine (/assets/js/pricing.js)
   var PAGE = document.body.getAttribute('data-page') || 'home';
   var LS_KEY = 'calma_content_v2';
 
@@ -241,11 +242,14 @@ var CALMA_BOOKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyAoC2Xdxf
 
   /* ---------------- shared bits ---------------- */
   function priceHTML(r, prefix) {
-    if (!hasPrice(r)) return '<div class="price"><small>Price</small><span class="ask">On request</span></div>';
-    return '<div class="price"><small>' + (prefix || 'From') + '</small><b>' + money(r.price) + '</b>' + (r.otaPrice ? '<s>' + money(r.otaPrice) + '</s>' : '') + '<small>per night</small></div>';
+    var fp = CP.fromPrice(C, r, iso(new Date()));
+    if (!fp) return '<div class="price"><small>Price</small><span class="ask">On request</span></div>';
+    var was = fp.was || (r.otaPrice && +r.otaPrice > fp.price ? +r.otaPrice : null);
+    return '<div class="price"><small>' + (prefix || 'From') + '</small><b>' + money(fp.price) + '</b>' + (was ? '<s>' + money(was) + '</s>' : '') + '<small>per night</small></div>';
   }
+  function dealBadge(r) { var d = CP.bestDeal(C, r, iso(new Date())); return d ? '−' + d.pct + '% · ' + d.name : (C.settings.directDiscount ? 'Save ' + C.settings.directDiscount + '% booking direct' : ''); }
   function roomCard(r) {
-    return '<article class="room rv">' + carousel(r.images || [], r.name, { badge: C.settings.directDiscount ? 'Save ' + C.settings.directDiscount + '% booking direct' : '' }) +
+    return '<article class="room rv">' + carousel(r.images || [], r.name, { badge: dealBadge(r) }) +
       '<div class="body"><span class="cat">' + esc(r.category) + '</span><h3>' + esc(r.name) + '</h3>' +
       '<div class="facts"><span>' + I.user + 'Up to ' + esc(r.maxGuests) + (+r.maxGuests === 1 ? ' guest' : ' guests') + '</span><span>' + I.bed + esc(r.beds) + '</span>' + (r.size ? '<span>' + I.size + esc(r.size) + '</span>' : '') + (r.breakfast !== false ? '<span>' + I.coffee + 'Breakfast included</span>' : '') + (r.view ? '<span>' + I.eye + esc(r.view) + '</span>' : '') + '</div>' +
       '<p class="short">' + esc(r.short) + '</p>' +
@@ -292,7 +296,7 @@ var CALMA_BOOKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyAoC2Xdxf
   /* ---------------- HOME ---------------- */
   function home() {
     var s = C.settings, H = s.heroImages || [], rooms = visibleRooms();
-    var minPrice = rooms.filter(hasPrice).map(function (r) { return +r.price; }).sort(function (a, b) { return a - b; })[0];
+    var minPrice = rooms.map(function (r) { var f = CP.fromPrice(C, r, iso(new Date())); return f ? f.price : null; }).filter(function (x) { return x != null; }).sort(function (a, b) { return a - b; })[0];
     var main = $('#main');
     main.innerHTML =
       '<section class="hero"><div class="wrap hero-grid"><div class="rv">' +
@@ -334,6 +338,8 @@ var CALMA_BOOKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyAoC2Xdxf
           '<div class="body"><span class="eyebrow">' + esc(r.category) + '</span><h2>' + esc(r.name) + '</h2>' +
           '<div class="meta-row"><span class="pill">' + I.user + ' Up to ' + esc(r.maxGuests) + (+r.maxGuests === 1 ? ' guest' : ' guests') + '</span><span class="pill">' + I.bed + ' ' + esc(r.beds) + '</span>' + (r.size ? '<span class="pill">' + esc(r.size) + '</span>' : '') + (r.breakfast !== false ? '<span class="pill">' + I.coffee + ' Breakfast included</span>' : '') + (r.view ? '<span class="pill">' + I.eye + ' ' + esc(r.view) + '</span>' : '') + '</div>' +
           '<p class="desc">' + esc(r.description) + '</p><ul class="amen-list">' + (r.amenities || []).map(function (a) { return '<li>' + I.check + esc(a) + '</li>'; }).join('') + '</ul>' +
+          (CP.plans(C, r).length > 1 ? '<div class="rate-opts"><small>Rate options</small>' + CP.plans(C, r).map(function (p) { var a = +p.adjust || 0; return '<span>' + esc(p.name) + (a < 0 ? ' <em>' + a + '%</em>' : '') + (p.refundable === false ? '' : ' · free cancellation') + '</span>'; }).join('') + '</div>' : '') +
+          (CP.bestDeal(C, r, iso(new Date())) ? '<div class="deal-tag">' + I.tag + esc(CP.bestDeal(C, r, iso(new Date())).name) + ' −' + CP.bestDeal(C, r, iso(new Date())).pct + '%</div>' : '') +
           '<div class="foot">' + priceHTML(r) + '<div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn btn-ghost btn-sm" href="' + esc(wa('Hello CALMA Hotel, I have a question about the ' + r.name + '.')) + '" target="_blank" rel="noopener">Ask</a><a class="btn btn-primary" href="/book/?room=' + encodeURIComponent(r.id) + '">Book this room</a></div></div></div></article>';
       }).join('') + '</div></div></section>';
     wireCarousels(main); wireSearch(main);
@@ -363,34 +369,87 @@ var CALMA_BOOKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyAoC2Xdxf
     $('#main').innerHTML = '<section class="phead"><div class="wrap"><div class="crumbs"><a href="/">Home</a> / Contact</div><h1>We’re one message away.</h1><p>The fastest way to reach us is WhatsApp — our reception is open 24 hours. To book a room, use the booking page: it takes less than a minute.</p>' +
       '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px"><a class="btn btn-primary" href="/book/">Book a room</a><a class="btn btn-wa" href="' + esc(wa('Hello CALMA Hotel')) + '" target="_blank" rel="noopener">' + I.wa + ' WhatsApp</a><a class="btn btn-ghost" href="tel:' + esc((C.settings.phone || '').replace(/\s/g, '')) + '">' + I.phone + ' Call</a></div></div></section>' +
       '<section class="section" style="padding-top:30px"><div class="wrap">' + locationHTML() + '</div></section>' +
+      rulesHTML() +
       '<section class="section on-sand"><div class="wrap"><div class="head center rv"><span class="eyebrow">Good to know</span><h2>Questions, answered.</h2></div>' + faqHTML() + '</div></section>';
+  }
+  function rulesHTML() {
+    var s = C.settings, L = [];
+    if (s.checkinTime) L.push(['Check-in', 'From ' + s.checkinTime]);
+    if (s.checkoutTime) L.push(['Check-out', 'Until ' + s.checkoutTime]);
+    (C.policies || []).forEach(function (p) { if (p && (p.title || p.text)) L.push([p.title, p.text]); });
+    (s.taxes || []).forEach(function (t) { if (t && t.name) L.push([t.name, (t.pct ? t.pct + '%' : '') + (t.pct && t.perNight ? ' + ' : '') + (t.perNight ? money(t.perNight) + ' per night' : '') + (t.included ? ' — included in the price' : ' — added to the total')]); });
+    if (!L.length) return '';
+    return '<section class="section" style="padding-top:10px"><div class="wrap"><div class="head rv"><div><span class="eyebrow">House rules</span><h2>Before you arrive.</h2></div></div><dl class="house-rules rv">' + L.map(function (x) { return '<div><dt>' + esc(x[0]) + '</dt><dd>' + esc(x[1]) + '</dd></div>'; }).join('') + '</dl></div></section>';
   }
 
   /* ---------------- BOOKING (3 steps) ---------------- */
+  function sha256(text) {
+    if (!window.crypto || !crypto.subtle || !window.TextEncoder) return Promise.resolve('');
+    return crypto.subtle.digest('SHA-256', new TextEncoder().encode(String(text).trim().toUpperCase()))
+      .then(function (h) { return Array.prototype.map.call(new Uint8Array(h), function (x) { return ('0' + x.toString(16)).slice(-2); }).join(''); });
+  }
   function bookPage() {
     var q = new URLSearchParams(location.search), today = iso(new Date());
-    var st = window.__bk || { step: 1, cin: q.get('in') || addDays(today, 1), cout: q.get('out') || '', ad: +(q.get('ad') || 2), ch: +(q.get('ch') || 0), room: q.get('room') || '', guest: {} };
+    var st = window.__bk || { step: 1, cin: q.get('in') || addDays(today, 1), cout: q.get('out') || '', ad: +(q.get('ad') || 2), ch: +(q.get('ch') || 0), room: q.get('room') || '', plan: '', guest: {}, codeIn: '', codeHash: '', booked: null, availFor: '' };
     if (!st.cout || st.cout <= st.cin) st.cout = addDays(st.cin, 2);
     if (st.cin < today) { st.cin = addDays(today, 1); st.cout = addDays(st.cin, 2); }
     window.__bk = st;
     var main = $('#main');
     main.innerHTML = '<section class="phead" style="padding-bottom:10px"><div class="wrap"><div class="crumbs"><a href="/">Home</a> / Book</div><h1>Book your stay</h1><p>Three quick steps. No card needed — our team confirms on WhatsApp.</p></div></section>' +
-      '<section class="section" style="padding-top:20px"><div class="wrap book-grid"><div><ol class="steps"><li data-s="1">1 · Dates &amp; guests</li><li data-s="2">2 · Choose a room</li><li data-s="3">3 · Your details</li></ol><div id="wiz"></div></div><aside class="summary" id="sum"></aside></div></section>';
+      '<section class="section" style="padding-top:20px"><div class="wrap book-grid"><div><ol class="steps"><li data-s="1">1 · Dates &amp; guests</li><li data-s="2">2 · Room &amp; rate</li><li data-s="3">3 · Your details</li></ol><div id="wiz"></div></div><aside class="summary" id="sum"></aside></div></section>';
     draw();
 
     function room() { return visibleRooms().filter(function (r) { return r.id === st.room; })[0]; }
     function nights() { return nightsBetween(st.cin, st.cout); }
     function guests() { return st.ad + st.ch; }
-    function total(r) { return hasPrice(r) ? +r.price * nights() : null; }
+    function opts() { return { today: today, codeHash: st.codeHash, adults: st.ad, children: st.ch }; }
+    function quoteFor(r, planId) { return CP.quote(C, r, planId, st.cin, st.cout, opts()); }
+    function quote() { var r = room(); return r ? quoteFor(r, st.plan) : null; }
+    // why a room can't be booked for these dates (or '' when it can)
+    function roomBlock(r) {
+      if (+r.maxGuests < guests()) return 'Too small for ' + guests() + ' guests';
+      if (CP.closedFor(r, st.cin, st.cout)) return 'Not available on these dates';
+      var left = CP.left(r, st.cin, st.cout, st.booked);
+      if (left === 0) return 'Sold out on these dates';
+      return '';
+    }
+    function planBlock(qt) {
+      if (!qt.minOk) return 'Minimum stay ' + qt.minNights + ' nights';
+      if (!qt.maxOk) return 'Maximum stay ' + qt.maxNights + ' nights';
+      if (qt.cta) return 'No check-in on ' + nice(st.cin);
+      if (qt.ctd) return 'No check-out on ' + nice(st.cout);
+      return '';
+    }
+    function validSel() { var r = room(); if (!r || roomBlock(r)) return false; var qt = quoteFor(r, st.plan); return qt.plan.id === st.plan && !planBlock(qt); }
     function steps() { $$('.steps li', main).forEach(function (li) { var s = +li.getAttribute('data-s'); li.className = s < st.step ? 'done' : s === st.step ? 'on' : ''; }); }
+    function taxNote() { var inc = ((C.settings.taxes) || []).filter(function (t) { return t && t.included && t.name; }).map(function (t) { return t.name; }); return inc.length ? 'Includes ' + inc.join(', ') : ''; }
     function summary() {
-      var r = room(), n = nights(), t = total(r);
+      var r = room(), n = nights(), qt = r && st.plan ? quote() : null;
+      var rows = '';
+      if (r && qt && qt.priced) {
+        rows += '<div class="srow"><span>' + esc(qt.plan.name) + ' · ' + n + ' night' + (n > 1 ? 's' : '') + '</span><span>' + money(qt.base) + '</span></div>';
+        if (qt.extras) rows += '<div class="srow"><span>Extra guests</span><span>' + money(qt.extras) + '</span></div>';
+        if (qt.discount) rows += '<div class="srow deal"><span>' + esc(qt.promo.name) + ' (−' + qt.promo.pct + '%)</span><span>−' + money(qt.discount) + '</span></div>';
+        (qt.taxLines || []).forEach(function (t) { rows += '<div class="srow"><span>' + esc(t.name) + '</span><span>' + money(t.amount) + '</span></div>'; });
+        rows += '<div class="srow total"><span>Total</span><span>' + money(qt.grand) + '</span></div>' + (taxNote() ? '<div class="srow"><span style="font-size:.8rem">' + esc(taxNote()) + '</span><span></span></div>' : '');
+      } else if (r && st.plan) rows += '<div class="srow total"><span>Total</span><span>Confirmed on WhatsApp</span></div>';
       $('#sum').innerHTML = (r && r.images && r.images[0] ? img(r.images[0], r.name, '', '380px') : img((C.settings.heroImages || [])[0] || '', 'CALMA Hotel', '', '380px')) +
         '<div class="sb"><h3>' + (r ? esc(r.name) : 'Your stay') + '</h3>' +
         '<div class="srow"><span>Check-in</span><span>' + nice(st.cin) + '</span></div><div class="srow"><span>Check-out</span><span>' + nice(st.cout) + '</span></div>' +
         '<div class="srow"><span>Nights</span><span>' + n + '</span></div><div class="srow"><span>Guests</span><span>' + st.ad + ' adult' + (st.ad > 1 ? 's' : '') + (st.ch ? ', ' + st.ch + ' child' + (st.ch > 1 ? 'ren' : '') : '') + '</span></div>' +
-        (r ? (t != null ? '<div class="srow"><span>' + money(r.price) + ' × ' + n + ' night' + (n > 1 ? 's' : '') + '</span><span>' + money(t) + '</span></div><div class="srow total"><span>Total</span><span>' + money(t) + '</span></div>' : '<div class="srow total"><span>Total</span><span>Confirmed on WhatsApp</span></div>') : '') +
+        rows + (qt && qt.plan.cancellation ? '<div class="pol ' + (qt.plan.refundable === false ? 'nr' : 'ok') + '">' + (qt.plan.refundable === false ? I.tag : I.check) + '<span>' + esc(qt.plan.cancellation) + '</span></div>' : '') +
         (C.settings.directDiscountText ? '<div class="save-note">' + I.tag + '<span>' + esc(C.settings.directDiscountText) + '. Pay at the hotel.</span></div>' : '') + '</div>';
+    }
+    function fetchAvail() {
+      var key = st.cin + '|' + st.cout;
+      if (st.availFor === key) return;
+      st.availFor = key; st.booked = null;
+      var tracked = visibleRooms().some(function (r) { return r.inventory != null && r.inventory !== ''; });
+      if (!tracked || !CALMA_BOOKING_ENDPOINT) { st.booked = {}; return; }
+      var fin = function (b) { if (st.availFor !== key || st.booked) return; st.booked = b || {}; if (st.step === 2) draw(); };
+      setTimeout(function () { fin({}); }, 7000);
+      fetch(CALMA_BOOKING_ENDPOINT + '?action=avail&from=' + st.cin + '&to=' + st.cout + '&t=' + Date.now()).then(function (r) { return r.json(); })
+        .then(function (j) { fin(j && j.booked); }).catch(function () { fin({}); });
     }
     function draw() {
       steps(); summary();
@@ -402,28 +461,51 @@ var CALMA_BOOKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyAoC2Xdxf
         wireSearch(w, sync);
         f.addEventListener('submit', function (e) { e.preventDefault(); sync(); if (nights() < 1) return; st.step = 2; draw(); top(); });
       } else if (st.step === 2) {
-        var rs = visibleRooms();
-        w.innerHTML = '<div class="panel rv"><h2>Choose your room</h2><p class="sub">' + nice(st.cin) + ' → ' + nice(st.cout) + ' · ' + nights() + ' night' + (nights() > 1 ? 's' : '') + ' · ' + guests() + ' guest' + (guests() > 1 ? 's' : '') + '</p><div class="pick">' +
-          rs.map(function (r) {
-            var fit = +r.maxGuests >= guests(), blocked = blockedFor(r, st.cin, st.cout), na = blocked || !fit, t = total(r);
-            return '<div class="pick-room' + (na ? ' na' : '') + (st.room === r.id && !na ? ' sel' : '') + '" role="radio" tabindex="' + (na ? -1 : 0) + '" aria-checked="' + (st.room === r.id) + '" data-id="' + esc(r.id) + '">' + img((r.images || [])[0] || '', r.name, '', '200px') +
-              '<div><h3>' + esc(r.name) + '</h3><div class="facts"><span>Up to ' + esc(r.maxGuests) + (+r.maxGuests === 1 ? ' guest' : ' guests') + '</span><span>' + esc(r.beds) + '</span>' + (r.breakfast !== false ? '<span>Breakfast included</span>' : '') + '</div>' +
-              (blocked ? '<div class="na-tag">Not available on these dates</div>' : !fit ? '<div class="na-tag">Too small for ' + guests() + ' guests</div>' : '<div style="color:var(--ink-60);font-size:.9rem;margin-top:4px">' + esc(r.short) + '</div>') + '</div>' +
-              '<div class="right">' + (t != null ? '<div><small style="color:var(--ink-40)">' + nights() + ' night' + (nights() > 1 ? 's' : '') + '</small><div class="tot">' + money(t) + '</div><small style="color:var(--ink-40)">' + money(r.price) + ' / night</small></div>' : '<div><div class="tot" style="font-size:1.05rem">Price on request</div></div>') + '<div class="radio"></div></div></div>';
-          }).join('') + '</div><div class="wiz-nav"><button class="btn btn-ghost" data-back>Back</button><button class="btn btn-primary" data-next' + (st.room && rs.some(function (r) { return r.id === st.room && +r.maxGuests >= guests() && !blockedFor(r, st.cin, st.cout); }) ? '' : ' disabled') + '>Continue ' + I.arrow + '</button></div></div>';
-        $$('.pick-room:not(.na)', w).forEach(function (p) {
-          var pickIt = function () { st.room = p.getAttribute('data-id'); $$('.pick-room', w).forEach(function (x) { x.classList.toggle('sel', x === p); x.setAttribute('aria-checked', x === p); }); $('[data-next]', w).disabled = false; summary(); };
+        fetchAvail();
+        var rs = visibleRooms(), O = opts(), loading = st.booked === null;
+        var anyCode = (C.promos || []).some(function (p) { return p.type === 'code' && p.active !== false; });
+        w.innerHTML = '<div class="panel rv"><h2>Choose your room &amp; rate</h2><p class="sub">' + nice(st.cin) + ' → ' + nice(st.cout) + ' · ' + nights() + ' night' + (nights() > 1 ? 's' : '') + ' · ' + guests() + ' guest' + (guests() > 1 ? 's' : '') + (loading ? ' · <span class="muted">checking availability…</span>' : '') + '</p>' +
+          (anyCode ? '<form class="promo-row" novalidate><input name="code" placeholder="Promo code" value="' + esc(st.codeIn) + '" autocomplete="off" aria-label="Promo code"><button class="btn btn-ghost btn-sm" type="submit">Apply</button><span data-cmsg>' + (st.codeHash ? I.check + ' Code applied' : '') + '</span></form>' : '') +
+          '<div class="pick">' + rs.map(function (r) {
+            var why = roomBlock(r), left = loading ? null : CP.left(r, st.cin, st.cout, st.booked), deal = CP.bestDeal(C, r, today);
+            // like Booking: hide rate plans that don't fit this stay (e.g. weekly rate for 3 nights) unless none fit
+            var all = CP.plans(C, r), fits = all.filter(function (p) { return !planBlock(CP.quote(C, r, p.id, st.cin, st.cout, O)); });
+            var plans = fits.length ? fits : all;
+            return '<div class="room-pick' + (why ? ' na' : '') + '"><div class="rp-top">' + img((r.images || [])[0] || '', r.name, '', '200px') +
+              '<div><h3>' + esc(r.name) + '</h3><div class="facts"><span>Up to ' + esc(r.maxGuests) + (+r.maxGuests === 1 ? ' guest' : ' guests') + '</span><span>' + esc(r.beds) + '</span>' + (r.view ? '<span>' + esc(r.view) + '</span>' : '') + '</div>' +
+              (why ? '<div class="na-tag">' + why + '</div>' : (left != null && left <= 2 && left < +r.inventory ? '<div class="scarce">Only ' + left + ' room' + (left > 1 ? 's' : '') + ' left on our site</div>' : '') + (deal ? '<div class="deal-tag">' + I.tag + esc(deal.name) + ' −' + deal.pct + '%</div>' : '')) + '</div></div>' +
+              (why ? '' : '<div class="plans" role="radiogroup" aria-label="Rates for ' + esc(r.name) + '">' + plans.map(function (p) {
+                var qt = CP.quote(C, r, p.id, st.cin, st.cout, O), pb = planBlock(qt), sel = st.room === r.id && st.plan === p.id && !pb;
+                return '<div class="plan-row' + (pb ? ' na' : '') + (sel ? ' sel' : '') + '" role="radio" tabindex="' + (pb ? -1 : 0) + '" aria-checked="' + sel + '" data-id="' + esc(r.id) + '" data-plan="' + esc(p.id) + '">' +
+                  '<div class="pl"><b>' + esc(p.name) + '</b><span class="' + (p.breakfast === false ? '' : 'g') + '">' + (p.breakfast === false ? 'Room only' : I.coffee + ' Breakfast included') + '</span>' +
+                  '<span class="' + (p.refundable === false ? 'w' : 'g') + '">' + (p.refundable === false ? 'Non-refundable' : I.check + ' ' + (p.cancellation ? esc(p.cancellation) : 'Free cancellation')) + '</span>' + (pb ? '<span class="w">' + pb + '</span>' : '') + '</div>' +
+                  '<div class="pp">' + (qt.priced ? (qt.discount ? '<span class="off">−' + qt.promo.pct + '% ' + esc(qt.promo.name) + '</span><s>' + money(qt.base + qt.extras) + '</s>' : '') + '<b>' + money(qt.total) + '</b><small>' + nights() + ' night' + (nights() > 1 ? 's' : '') + (qt.taxes ? ' · + ' + money(qt.taxes) + ' taxes' : '') + '</small>' : '<b class="ask">Price on request</b>') + '</div><div class="radio"></div></div>';
+              }).join('') + '</div>') + '</div>';
+          }).join('') + '</div><div class="wiz-nav"><button class="btn btn-ghost" data-back>Back</button><button class="btn btn-primary" data-next' + (validSel() ? '' : ' disabled') + '>Continue ' + I.arrow + '</button></div></div>';
+        $$('.plan-row:not(.na)', w).forEach(function (p) {
+          var pickIt = function () { st.room = p.getAttribute('data-id'); st.plan = p.getAttribute('data-plan'); $$('.plan-row', w).forEach(function (x) { x.classList.toggle('sel', x === p); x.setAttribute('aria-checked', x === p); }); $('[data-next]', w).disabled = !validSel(); summary(); };
           p.addEventListener('click', pickIt); p.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickIt(); } });
         });
+        var pf = $('.promo-row', w);
+        if (pf) pf.addEventListener('submit', function (e) {
+          e.preventDefault(); var code = $('[name=code]', pf).value.trim(), msg = $('[data-cmsg]', pf);
+          if (!code) { st.codeIn = ''; st.codeHash = ''; draw(); return; }
+          sha256(code).then(function (h) {
+            var hit = (C.promos || []).some(function (p) { return p.type === 'code' && p.active !== false && p.codeHash === h; });
+            if (hit) { st.codeIn = code.toUpperCase(); st.codeHash = h; draw(); }
+            else { st.codeHash = ''; msg.className = 'bad'; msg.textContent = 'This code isn’t valid'; summary(); }
+          });
+        });
         $('[data-back]', w).onclick = function () { st.step = 1; draw(); top(); };
-        $('[data-next]', w).onclick = function () { st.step = 3; draw(); top(); };
+        $('[data-next]', w).onclick = function () { if (validSel()) { st.step = 3; draw(); top(); } };
       } else if (st.step === 3) {
-        var g = st.guest;
-        w.innerHTML = '<form class="panel rv" novalidate><h2>Your details</h2><p class="sub">We’ll send your confirmation on WhatsApp.</p><div class="fgrid">' +
+        var g = st.guest, rules = (C.policies || []).filter(function (p) { return p && (p.title || p.text); });
+        w.innerHTML = '<form class="panel rv" novalidate><h2>Your details</h2><p class="sub">We’ll send your confirmation on WhatsApp.</p>' + (st.err ? '<div class="na-tag" style="margin-bottom:14px">' + esc(st.err) + '</div>' : '') + '<div class="fgrid">' +
           fld('name', 'Full name', 'text', g.name, 'name', true, 'Please enter your name') + fld('phone', 'WhatsApp / phone number', 'tel', g.phone, 'tel', true, 'Please enter a phone number we can reach') +
           fld('email', 'Email (optional)', 'email', g.email, 'email', false, 'Please check the email address') +
           '<div class="field"><label for="f-arr">Estimated arrival time</label><select id="f-arr" name="arrival"><option value="">I don’t know yet</option>' + ['Morning (8–12)', 'Afternoon (12–17)', 'Evening (17–22)', 'Late night (after 22)'].map(function (o) { return '<option' + (g.arrival === o ? ' selected' : '') + '>' + o + '</option>'; }).join('') + '</select></div>' +
           '<div class="field full"><label for="f-msg">Special requests (optional)</label><textarea id="f-msg" name="message" rows="3" placeholder="Airport pickup, early check-in, extra bed…">' + esc(g.message || '') + '</textarea></div></div>' +
+          (rules.length ? '<details class="rules"><summary>House rules</summary><dl>' + rules.map(function (p) { return '<dt>' + esc(p.title) + '</dt><dd>' + esc(p.text) + '</dd>'; }).join('') + '</dl></details>' : '') +
           '<div class="wiz-nav"><button type="button" class="btn btn-ghost" data-back>Back</button><button type="submit" class="btn btn-primary">Confirm booking request ' + I.arrow + '</button></div>' +
           '<p style="color:var(--ink-40);font-size:.85rem;margin-top:14px">No payment now. Your booking is confirmed once our team replies on WhatsApp.</p></form>';
         var form = $('form', w);
@@ -438,7 +520,7 @@ var CALMA_BOOKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyAoC2Xdxf
         });
         function save() { $$('input,select,textarea', form).forEach(function (el) { st.guest[el.name] = el.value; }); }
       } else if (st.step === 4) {
-        var r = room(), t = total(r), msg = waText();
+        var msg = waText();
         w.innerHTML = '<div class="panel done-card rv"><div class="ok">' + I.check + '</div><h2>Request received!</h2><p class="sub" style="margin:8px auto 0;max-width:440px">Thank you, ' + esc((st.guest.name || '').split(' ')[0]) + '. Please send it to us on WhatsApp so our team can confirm right away.</p>' +
           '<div class="code">' + esc(st.code) + '</div><div style="color:var(--ink-40);font-size:.85rem">Your booking code</div>' +
           '<div class="btns"><a class="btn btn-wa" href="' + esc(wa(msg)) + '" target="_blank" rel="noopener">' + I.wa + ' Send on WhatsApp</a><a class="btn btn-ghost" href="/">Back to home</a></div></div>';
@@ -450,21 +532,33 @@ var CALMA_BOOKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyAoC2Xdxf
       return '<div class="field"><label for="f-' + n + '">' + label + '</label><input id="f-' + n + '" name="' + n + '" type="' + type + '" autocomplete="' + ac + '"' + (req ? ' required' : '') + ' value="' + esc(val || '') + '"' + (type === 'tel' ? ' inputmode="tel" placeholder="+20 …"' : '') + '><span class="err">' + err + '</span></div>';
     }
     function waText() {
-      var r = room(), t = total(r), g = st.guest;
-      return ['Hello CALMA Hotel, I booked on your website.', 'Booking code: ' + st.code, 'Room: ' + (r ? r.name : '-'), 'Check-in: ' + st.cin, 'Check-out: ' + st.cout + ' (' + nights() + ' nights)',
-        'Guests: ' + st.ad + ' adults' + (st.ch ? ', ' + st.ch + ' children' : ''), t != null ? 'Total: ' + money(t) : '', 'Name: ' + (g.name || ''), 'Phone: ' + (g.phone || ''), g.email ? 'Email: ' + g.email : '', g.arrival ? 'Arrival: ' + g.arrival : '', g.message ? 'Notes: ' + g.message : ''].filter(Boolean).join('\n');
+      var r = room(), qt = quote(), g = st.guest;
+      return ['Hello CALMA Hotel, I booked on your website.', 'Booking code: ' + st.code, 'Room: ' + (r ? r.name : '-'), qt ? 'Rate: ' + qt.plan.name : '', 'Check-in: ' + st.cin, 'Check-out: ' + st.cout + ' (' + nights() + ' nights)',
+        'Guests: ' + st.ad + ' adults' + (st.ch ? ', ' + st.ch + ' children' : ''), qt && qt.promo ? 'Offer: ' + qt.promo.name + ' (−' + qt.promo.pct + '%)' + (st.codeIn ? ' · code ' + st.codeIn : '') : '',
+        qt && qt.priced ? 'Total: ' + money(qt.grand) : '', 'Name: ' + (g.name || ''), 'Phone: ' + (g.phone || ''), g.email ? 'Email: ' + g.email : '', g.arrival ? 'Arrival: ' + g.arrival : '', g.message ? 'Notes: ' + g.message : ''].filter(Boolean).join('\n');
     }
     function submit(btn) {
-      var r = room(), t = total(r), g = st.guest;
-      btn.disabled = true; btn.textContent = 'Sending…';
-      var payload = { action: 'book', name: g.name, phone: g.phone, email: g.email, checkin: st.cin, checkout: st.cout, nights: nights(), room: r ? r.name : '', roomId: st.room, adults: st.ad, children: st.ch, guests: guests(), total: t, currency: C.settings.currency, arrival: g.arrival, message: g.message, source: 'Website booking', page: location.href };
+      var r = room(), qt = quote(), g = st.guest;
+      btn.disabled = true; btn.textContent = 'Sending…'; st.err = '';
+      var payload = { action: 'book', name: g.name, phone: g.phone, email: g.email, checkin: st.cin, checkout: st.cout, nights: nights(), room: r ? r.name : '', roomId: st.room, adults: st.ad, children: st.ch, guests: guests(),
+        planId: qt ? qt.plan.id : '', planName: qt ? qt.plan.name : '', promoCode: st.codeHash ? st.codeIn : '', promo: qt && qt.promo ? qt.promo.name : '', base: qt ? qt.base : null, discount: qt ? qt.discount : 0, total: qt && qt.priced ? qt.grand : null,
+        currency: C.settings.currency, arrival: g.arrival, message: g.message, source: 'Website booking', page: location.href };
       var fallback = 'WEB-' + Date.now().toString(36).toUpperCase().slice(-6);
       var done = function (code) { st.code = code || fallback; st.step = 4; draw(); top(); };
       if (!CALMA_BOOKING_ENDPOINT) return done();
       var timer = setTimeout(function () { done(); }, 12000);
       fetch(CALMA_BOOKING_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) })
         .then(function (res) { return res.json(); })
-        .then(function (j) { clearTimeout(timer); if (st.step !== 4) done(j && j.code); })
+        .then(function (j) {
+          clearTimeout(timer); if (st.step === 4) return;
+          if (j && j.status === 'error' && /sold-out|not-available|restricted/.test(j.message || '')) {
+            // the room went while the guest was typing — send them back to pick again
+            st.err = ''; st.availFor = ''; st.plan = ''; st.step = 2; draw(); top();
+            var p = $('.panel .sub', main); if (p) p.insertAdjacentHTML('afterend', '<div class="na-tag" style="margin-bottom:12px">Sorry — that room was just booked for these dates. Please choose another room or change your dates.</div>');
+            return;
+          }
+          done(j && j.code);
+        })
         .catch(function () {
           // The request was sent, but the reply could not be read (or the network failed).
           // Never re-send (that would duplicate the booking) — the WhatsApp message carries every detail anyway.

@@ -24,7 +24,8 @@
     ],
     "instagram": "https://www.instagram.com/calma__hotel/",
     "facebook": "https://web.facebook.com/profile.php?id=61592420100358",
-    "tiktok": "https://www.tiktok.com/@calma__hotel"
+    "tiktok": "https://www.tiktok.com/@calma__hotel",
+    "taxes": []
   },
   "rooms": [
     {
@@ -58,7 +59,14 @@
         "/assets/img/h/corridor.jpg"
       ],
       "visible": true,
-      "blocked": []
+      "blocked": [],
+      "inventory": null,
+      "minNights": null,
+      "maxNights": null,
+      "baseOcc": null,
+      "extraAdult": null,
+      "childFee": null,
+      "rates": {}
     },
     {
       "id": "deluxe-double",
@@ -93,7 +101,14 @@
       "visible": true,
       "blocked": [],
       "view": "Street view — window or balcony",
-      "breakfast": true
+      "breakfast": true,
+      "inventory": null,
+      "minNights": null,
+      "maxNights": null,
+      "baseOcc": null,
+      "extraAdult": null,
+      "childFee": null,
+      "rates": {}
     },
     {
       "id": "classic-twin",
@@ -126,7 +141,14 @@
       "visible": true,
       "blocked": [],
       "view": "",
-      "breakfast": true
+      "breakfast": true,
+      "inventory": null,
+      "minNights": null,
+      "maxNights": null,
+      "baseOcc": null,
+      "extraAdult": null,
+      "childFee": null,
+      "rates": {}
     },
     {
       "id": "triple",
@@ -161,7 +183,14 @@
       "visible": true,
       "blocked": [],
       "view": "Street view — window or balcony",
-      "breakfast": true
+      "breakfast": true,
+      "inventory": null,
+      "minNights": null,
+      "maxNights": null,
+      "baseOcc": null,
+      "extraAdult": null,
+      "childFee": null,
+      "rates": {}
     },
     {
       "id": "family",
@@ -197,7 +226,14 @@
       "visible": true,
       "blocked": [],
       "view": "",
-      "breakfast": true
+      "breakfast": true,
+      "inventory": null,
+      "minNights": null,
+      "maxNights": null,
+      "baseOcc": null,
+      "extraAdult": null,
+      "childFee": null,
+      "rates": {}
     },
     {
       "id": "modern-suite",
@@ -232,7 +268,14 @@
       "visible": true,
       "blocked": [],
       "view": "",
-      "breakfast": true
+      "breakfast": true,
+      "inventory": null,
+      "minNights": null,
+      "maxNights": null,
+      "baseOcc": null,
+      "extraAdult": null,
+      "childFee": null,
+      "rates": {}
     }
   ],
   "gallery": [
@@ -461,6 +504,46 @@
     {
       "q": "Can you arrange an airport pickup?",
       "a": "Yes. Add it in the notes when you book, or message us on WhatsApp with your flight details."
+    }
+  ],
+  "ratePlans": [
+    {
+      "id": "standard",
+      "name": "Flexible rate",
+      "adjust": 0,
+      "breakfast": true,
+      "refundable": true,
+      "cancellation": "Free cancellation up to 48 hours before arrival.",
+      "minNights": null,
+      "rooms": [],
+      "active": true
+    },
+    {
+      "id": "nonref",
+      "name": "Non-refundable",
+      "adjust": -10,
+      "breakfast": true,
+      "refundable": false,
+      "cancellation": "Non-refundable — pay in full when we confirm your booking.",
+      "minNights": null,
+      "rooms": [],
+      "active": false
+    }
+  ],
+  "seasons": [],
+  "promos": [],
+  "policies": [
+    {
+      "title": "Breakfast",
+      "text": "Breakfast is included with every room."
+    },
+    {
+      "title": "Reception",
+      "text": "Our reception is open 24 hours — arrive at any time."
+    },
+    {
+      "title": "Payment",
+      "text": "No card is needed to book. You pay at the hotel."
     }
   ]
 }
