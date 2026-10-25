@@ -28,34 +28,72 @@
   },
   "rooms": [
     {
+      "id": "single",
+      "name": "Single Room",
+      "category": "Single",
+      "short": "A calm room for one, facing the street through a window or balcony.",
+      "description": "A quiet, comfortable room for the solo traveller — warm lighting, a vanity with a backlit mirror and everything you need for a restful night. Facing the street, with a window or a balcony.",
+      "beds": "1 single bed",
+      "view": "Street view — window or balcony",
+      "maxGuests": 1,
+      "size": "",
+      "price": null,
+      "otaPrice": null,
+      "breakfast": true,
+      "amenities": [
+        "Breakfast included",
+        "Air conditioning",
+        "Free Wi-Fi",
+        "Housekeeping",
+        "Laundry service",
+        "24-hour reception",
+        "Private bathroom",
+        "Smart TV",
+        "Street view — window or balcony"
+      ],
+      "images": [
+        "/assets/img/h/single-1.jpg",
+        "/assets/img/h/room-door.jpg",
+        "/assets/img/h/bath-2.jpg",
+        "/assets/img/h/corridor.jpg"
+      ],
+      "visible": true,
+      "blocked": []
+    },
+    {
       "id": "deluxe-double",
       "name": "Deluxe Double Room",
       "category": "Double",
-      "short": "One double bed, a work corner and big windows over Downtown.",
-      "description": "A generous double bed, a proper desk for slow mornings with a laptop, and deeper, softer furnishings throughout. Built for couples and for guests who want a little more room to settle in.",
-      "beds": "1 double bed",
+      "short": "One double bed or two single beds, facing the street through a window or balcony.",
+      "description": "Choose one generous double bed or two single beds — tell us which when you book. A proper desk for slow mornings with a laptop, softer furnishings throughout, and a window or balcony onto the street.",
+      "beds": "1 double bed or 2 single beds",
       "maxGuests": 2,
       "size": "",
       "price": null,
       "otaPrice": null,
       "amenities": [
-        "Private bathroom",
+        "Breakfast included",
         "Air conditioning",
+        "Free Wi-Fi",
+        "Housekeeping",
+        "Laundry service",
+        "24-hour reception",
+        "Private bathroom",
         "Smart TV",
         "Work desk",
-        "Free Wi-Fi",
-        "Blackout curtains"
+        "Street view — window or balcony"
       ],
       "images": [
         "/assets/img/h/double-1.jpg",
         "/assets/img/h/double-2.jpg",
         "/assets/img/h/double-3.jpg",
         "/assets/img/h/double-4.jpg",
-        "/assets/img/h/balcony-view-2.jpg",
         "/assets/img/h/bath-1.jpg"
       ],
       "visible": true,
-      "blocked": []
+      "blocked": [],
+      "view": "Street view — window or balcony",
+      "breakfast": true
     },
     {
       "id": "classic-twin",
@@ -69,10 +107,14 @@
       "price": null,
       "otaPrice": null,
       "amenities": [
-        "Private bathroom",
+        "Breakfast included",
         "Air conditioning",
-        "Smart TV",
         "Free Wi-Fi",
+        "Housekeeping",
+        "Laundry service",
+        "24-hour reception",
+        "Private bathroom",
+        "Smart TV",
         "City-facing window"
       ],
       "images": [
@@ -82,25 +124,31 @@
         "/assets/img/h/bath-2.jpg"
       ],
       "visible": true,
-      "blocked": []
+      "blocked": [],
+      "view": "",
+      "breakfast": true
     },
     {
       "id": "triple",
       "name": "Triple Room",
       "category": "Triple",
-      "short": "Three single beds in one warm room — friends or a small family.",
-      "description": "Three beds dressed in warm linens beneath soft brass wall lighting. Built for three friends or a small family who would rather share one warm room than split across two.",
+      "short": "Three single beds in one warm room, facing the street — friends or a small family.",
+      "description": "Three beds dressed in warm linens beneath soft brass wall lighting, with a window or balcony onto the street. Built for three friends or a small family who would rather share one warm room than split across two.",
       "beds": "3 single beds",
       "maxGuests": 3,
       "size": "",
       "price": null,
       "otaPrice": null,
       "amenities": [
-        "Private bathroom",
+        "Breakfast included",
         "Air conditioning",
-        "Smart TV",
         "Free Wi-Fi",
-        "Wardrobe"
+        "Housekeeping",
+        "Laundry service",
+        "24-hour reception",
+        "Private bathroom",
+        "Smart TV",
+        "Street view — window or balcony"
       ],
       "images": [
         "/assets/img/h/triple-1.jpg",
@@ -111,7 +159,9 @@
         "/assets/img/h/shower.jpg"
       ],
       "visible": true,
-      "blocked": []
+      "blocked": [],
+      "view": "Street view — window or balcony",
+      "breakfast": true
     },
     {
       "id": "family",
@@ -125,10 +175,14 @@
       "price": null,
       "otaPrice": null,
       "amenities": [
-        "Private bathroom",
+        "Breakfast included",
         "Air conditioning",
-        "Smart TV",
         "Free Wi-Fi",
+        "Housekeeping",
+        "Laundry service",
+        "24-hour reception",
+        "Private bathroom",
+        "Smart TV",
         "Extra storage",
         "Work desk"
       ],
@@ -141,7 +195,9 @@
         "/assets/img/h/bath-modern.jpg"
       ],
       "visible": true,
-      "blocked": []
+      "blocked": [],
+      "view": "",
+      "breakfast": true
     },
     {
       "id": "modern-suite",
@@ -155,10 +211,14 @@
       "price": null,
       "otaPrice": null,
       "amenities": [
-        "Private bathroom",
+        "Breakfast included",
         "Air conditioning",
-        "Smart TV",
         "Free Wi-Fi",
+        "Housekeeping",
+        "Laundry service",
+        "24-hour reception",
+        "Private bathroom",
+        "Smart TV",
         "Sitting corner",
         "Backlit vanity"
       ],
@@ -170,7 +230,9 @@
         "/assets/img/h/bath-modern.jpg"
       ],
       "visible": true,
-      "blocked": []
+      "blocked": [],
+      "view": "",
+      "breakfast": true
     }
   ],
   "gallery": [
@@ -237,7 +299,7 @@
     {
       "src": "/assets/img/h/single-1.jpg",
       "cat": "Rooms",
-      "alt": "Room entrance with vanity"
+      "alt": "Single Room with vanity"
     },
     {
       "src": "/assets/img/h/bath-modern.jpg",
@@ -265,11 +327,6 @@
       "alt": "Balcony view over Downtown Cairo"
     },
     {
-      "src": "/assets/img/h/balcony-view-2.jpg",
-      "cat": "Views",
-      "alt": "Sunset view from a room balcony"
-    },
-    {
       "src": "/assets/img/h/sunroom.jpg",
       "cat": "Views",
       "alt": "Sunroom terrace with city views"
@@ -282,9 +339,9 @@
   ],
   "amenities": [
     {
-      "icon": "wifi",
-      "title": "Free fast Wi-Fi",
-      "text": "Reliable connection in every room and corridor."
+      "icon": "coffee",
+      "title": "Breakfast included",
+      "text": "A daily breakfast is included with every room."
     },
     {
       "icon": "clock",
@@ -292,14 +349,9 @@
       "text": "A warm welcome at any hour, from a team that knows the city."
     },
     {
-      "icon": "car",
-      "title": "Airport transfer",
-      "text": "Private pickup arranged ahead of your arrival."
-    },
-    {
-      "icon": "coffee",
-      "title": "Breakfast",
-      "text": "Fresh fruit, eggs and local pastries, on request."
+      "icon": "wifi",
+      "title": "Free Wi-Fi",
+      "text": "Fast, reliable connection in every room."
     },
     {
       "icon": "snow",
@@ -307,19 +359,24 @@
       "text": "Individually controlled in every room."
     },
     {
-      "icon": "tv",
-      "title": "Smart TV",
-      "text": "Streaming-ready television in every room."
+      "icon": "star",
+      "title": "Housekeeping",
+      "text": "Your room kept fresh and tidy during your stay."
+    },
+    {
+      "icon": "shirt",
+      "title": "Laundry service",
+      "text": "Hand us your laundry — we take care of the rest."
     },
     {
       "icon": "pin",
-      "title": "Downtown location",
-      "text": "In the heart of Downtown Cairo, close to cafés and shops."
+      "title": "On the street, in Downtown",
+      "text": "Single, double and triple rooms face the street — window or balcony."
     },
     {
-      "icon": "map",
-      "title": "Day trips",
-      "text": "Pyramids, Old Cairo and the Nile — planned by our team."
+      "icon": "car",
+      "title": "Airport transfer",
+      "text": "Private pickup arranged ahead of your arrival."
     }
   ],
   "journeys": [
@@ -384,6 +441,14 @@
     {
       "q": "How do I book?",
       "a": "Choose your dates and guests, pick a room and send your details. You get a booking code instantly and our team confirms on WhatsApp."
+    },
+    {
+      "q": "What is included in the price?",
+      "a": "Every room includes breakfast, air conditioning, free Wi-Fi, housekeeping, laundry service and our 24-hour reception."
+    },
+    {
+      "q": "Do the rooms have a view?",
+      "a": "Our single, double and triple rooms all face the street, with either a window or a balcony."
     },
     {
       "q": "Do I pay online?",

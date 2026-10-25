@@ -238,6 +238,9 @@ p { margin: 0; }
 .jrow p { color: var(--ink-60); }
 .meta-row { display: flex; gap: 10px; flex-wrap: wrap; }
 .pill { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; font-size: .84rem; color: var(--ink-80); background: var(--ivory); }
+.pill svg { width: 15px; height: 15px; flex: none; color: var(--brass); }
+.meta-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill { white-space: nowrap; }
 
 /* ---------- reviews / faq / location ---------- */
 .quote { max-width: 820px; margin: 0 auto; text-align: center; }

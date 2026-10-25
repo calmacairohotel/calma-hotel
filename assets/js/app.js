@@ -61,6 +61,8 @@ var CALMA_BOOKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyAoC2Xdxf
     tag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>',
     shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>',
     chat: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 11.5a8.4 8.4 0 0 1-12.3 7.4L3 20l1.2-5.4A8.5 8.5 0 1 1 21 11.5z"/></svg>',
+    shirt: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 3 3 6l2 5 3-1v11h8V10l3 1 2-5-5-3a4 4 0 0 1-8 0z"/></svg>',
+    eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
     star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2l3 6.6 7 .7-5.3 4.8 1.6 7L12 17.6 5.7 21.1l1.6-7L2 9.3l7-.7z"/></svg>',
     wifi: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 8.8a16 16 0 0 1 20 0"/><path d="M5 12.6a11 11 0 0 1 14 0"/><path d="M8.5 16.4a6 6 0 0 1 7 0"/><circle cx="12" cy="20" r="1"/></svg>',
     clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>',
@@ -245,13 +247,13 @@ var CALMA_BOOKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyAoC2Xdxf
   function roomCard(r) {
     return '<article class="room rv">' + carousel(r.images || [], r.name, { badge: C.settings.directDiscount ? 'Save ' + C.settings.directDiscount + '% booking direct' : '' }) +
       '<div class="body"><span class="cat">' + esc(r.category) + '</span><h3>' + esc(r.name) + '</h3>' +
-      '<div class="facts"><span>' + I.user + 'Up to ' + esc(r.maxGuests) + ' guests</span><span>' + I.bed + esc(r.beds) + '</span>' + (r.size ? '<span>' + I.size + esc(r.size) + '</span>' : '') + '</div>' +
+      '<div class="facts"><span>' + I.user + 'Up to ' + esc(r.maxGuests) + (+r.maxGuests === 1 ? ' guest' : ' guests') + '</span><span>' + I.bed + esc(r.beds) + '</span>' + (r.size ? '<span>' + I.size + esc(r.size) + '</span>' : '') + (r.breakfast !== false ? '<span>' + I.coffee + 'Breakfast included</span>' : '') + (r.view ? '<span>' + I.eye + esc(r.view) + '</span>' : '') + '</div>' +
       '<p class="short">' + esc(r.short) + '</p>' +
       '<div class="foot">' + priceHTML(r) + '<a class="btn btn-primary btn-sm" href="/book/?room=' + encodeURIComponent(r.id) + '">Book</a></div></div></article>';
   }
   function perksHTML() {
     var d = C.settings.directDiscount;
-    var P = [['tag', 'Lowest price here', d ? 'Save ' + d + '% vs Booking.com — no platform fees.' : 'No platform fees when you book direct.'], ['shield', 'No card needed', 'Send a request in under a minute; pay at the hotel.'], ['chat', 'Instant WhatsApp', 'Our team confirms your booking on WhatsApp.'], ['clock', '24-hour reception', 'Someone is always awake to welcome you.']];
+    var P = [['tag', 'Lowest price here', d ? 'Save ' + d + '% vs Booking.com — no platform fees.' : 'No platform fees when you book direct.'], ['shield', 'No card needed', 'Send a request in under a minute; pay at the hotel.'], ['chat', 'Instant WhatsApp', 'Our team confirms your booking on WhatsApp.'], ['coffee', 'Breakfast included', 'Breakfast, Wi-Fi, A/C, housekeeping & laundry in every room — plus 24-hour reception.']];
     return '<div class="perks">' + P.map(function (p) { return '<div class="perk rv"><i>' + I[p[0]] + '</i><div><b>' + p[1] + '</b><span>' + p[2] + '</span></div></div>'; }).join('') + '</div>';
   }
   function galleryHTML() {
@@ -323,14 +325,14 @@ var CALMA_BOOKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyAoC2Xdxf
   function roomsPage() {
     var main = $('#main'), rooms = visibleRooms();
     var cats = ['All rooms'].concat(rooms.map(function (r) { return r.category; }).filter(function (c, i, a) { return a.indexOf(c) === i; }));
-    main.innerHTML = '<section class="phead"><div class="wrap"><div class="crumbs"><a href="/">Home</a> / Rooms</div><h1>Rooms &amp; prices</h1><p>' + rooms.length + ' room types, all with a private bathroom, air conditioning and free Wi-Fi. ' + esc(C.settings.directDiscountText || '') + '.</p>' + searchbar() + '</div></section>' +
+    main.innerHTML = '<section class="phead"><div class="wrap"><div class="crumbs"><a href="/">Home</a> / Rooms</div><h1>Rooms &amp; prices</h1><p>' + rooms.length + ' room types. Every room includes breakfast, air conditioning, free Wi-Fi, housekeeping, laundry service and 24-hour reception. ' + esc(C.settings.directDiscountText || '') + '.</p>' + searchbar() + '</div></section>' +
       '<section class="section" style="padding-top:20px"><div class="wrap"><div class="filters">' + cats.map(function (c, i) { return '<button class="tab' + (i ? '' : ' on') + '" data-f="' + esc(c) + '">' + esc(c) + '</button>'; }).join('') +
       '<button class="tab" data-g="3">3+ guests</button></div><div id="rlist">' +
       rooms.map(function (r) {
         return '<article class="room-wide rv" id="' + esc(r.id) + '" data-cat="' + esc(r.category) + '" data-max="' + esc(r.maxGuests) + '"><div>' + carousel(r.images || [], r.name, { sizes: '(max-width:860px) 92vw, 55vw' }) +
           '<div class="thumbs">' + (r.images || []).map(function (s, i) { return '<img src="' + esc(sized(s, 300)) + '" alt="" data-i="' + i + '"' + (i ? '' : ' class="on"') + ' loading="lazy">'; }).join('') + '</div></div>' +
           '<div class="body"><span class="eyebrow">' + esc(r.category) + '</span><h2>' + esc(r.name) + '</h2>' +
-          '<div class="meta-row"><span class="pill">' + I.user + ' Up to ' + esc(r.maxGuests) + ' guests</span><span class="pill">' + I.bed + ' ' + esc(r.beds) + '</span>' + (r.size ? '<span class="pill">' + esc(r.size) + '</span>' : '') + '</div>' +
+          '<div class="meta-row"><span class="pill">' + I.user + ' Up to ' + esc(r.maxGuests) + (+r.maxGuests === 1 ? ' guest' : ' guests') + '</span><span class="pill">' + I.bed + ' ' + esc(r.beds) + '</span>' + (r.size ? '<span class="pill">' + esc(r.size) + '</span>' : '') + (r.breakfast !== false ? '<span class="pill">' + I.coffee + ' Breakfast included</span>' : '') + (r.view ? '<span class="pill">' + I.eye + ' ' + esc(r.view) + '</span>' : '') + '</div>' +
           '<p class="desc">' + esc(r.description) + '</p><ul class="amen-list">' + (r.amenities || []).map(function (a) { return '<li>' + I.check + esc(a) + '</li>'; }).join('') + '</ul>' +
           '<div class="foot">' + priceHTML(r) + '<div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn btn-ghost btn-sm" href="' + esc(wa('Hello CALMA Hotel, I have a question about the ' + r.name + '.')) + '" target="_blank" rel="noopener">Ask</a><a class="btn btn-primary" href="/book/?room=' + encodeURIComponent(r.id) + '">Book this room</a></div></div></div></article>';
       }).join('') + '</div></div></section>';
@@ -405,7 +407,7 @@ var CALMA_BOOKING_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyAoC2Xdxf
           rs.map(function (r) {
             var fit = +r.maxGuests >= guests(), blocked = blockedFor(r, st.cin, st.cout), na = blocked || !fit, t = total(r);
             return '<div class="pick-room' + (na ? ' na' : '') + (st.room === r.id && !na ? ' sel' : '') + '" role="radio" tabindex="' + (na ? -1 : 0) + '" aria-checked="' + (st.room === r.id) + '" data-id="' + esc(r.id) + '">' + img((r.images || [])[0] || '', r.name, '', '200px') +
-              '<div><h3>' + esc(r.name) + '</h3><div class="facts"><span>Up to ' + esc(r.maxGuests) + ' guests</span><span>' + esc(r.beds) + '</span></div>' +
+              '<div><h3>' + esc(r.name) + '</h3><div class="facts"><span>Up to ' + esc(r.maxGuests) + (+r.maxGuests === 1 ? ' guest' : ' guests') + '</span><span>' + esc(r.beds) + '</span>' + (r.breakfast !== false ? '<span>Breakfast included</span>' : '') + '</div>' +
               (blocked ? '<div class="na-tag">Not available on these dates</div>' : !fit ? '<div class="na-tag">Too small for ' + guests() + ' guests</div>' : '<div style="color:var(--ink-60);font-size:.9rem;margin-top:4px">' + esc(r.short) + '</div>') + '</div>' +
               '<div class="right">' + (t != null ? '<div><small style="color:var(--ink-40)">' + nights() + ' night' + (nights() > 1 ? 's' : '') + '</small><div class="tot">' + money(t) + '</div><small style="color:var(--ink-40)">' + money(r.price) + ' / night</small></div>' : '<div><div class="tot" style="font-size:1.05rem">Price on request</div></div>') + '<div class="radio"></div></div></div>';
           }).join('') + '</div><div class="wiz-nav"><button class="btn btn-ghost" data-back>Back</button><button class="btn btn-primary" data-next' + (st.room && rs.some(function (r) { return r.id === st.room && +r.maxGuests >= guests() && !blockedFor(r, st.cin, st.cout); }) ? '' : ' disabled') + '>Continue ' + I.arrow + '</button></div></div>';
