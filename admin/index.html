@@ -5,10 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>لوحة التحكم — CALMA Hotel</title>
 <meta name="robots" content="noindex, nofollow">
+<meta name="description" content="CALMA Hotel staff dashboard.">
 <link rel="icon" type="image/svg+xml" href="/assets/img/logo-mark.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&amp;display=swap">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&amp;display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&amp;display=swap"></noscript>
 <style>
 :root { --bg: #F6F2EA; --card: #fff; --line: #E6DCCB; --ink: #221A12; --muted: #7A6C5B; --brass: #B58A45; --brass-d: #94702F; --ok: #2F7A4F; --bad: #B4532A; --r: 14px; }
 * { box-sizing: border-box; }
@@ -39,7 +41,7 @@ a { color: var(--brass-d); }
 .tabs { max-width: 1240px; margin: 0 auto; padding: 0 20px; display: flex; gap: 4px; overflow-x: auto; }
 .tabs button { border: 0; background: none; padding: 12px 14px; cursor: pointer; font-weight: 600; color: var(--muted); border-bottom: 2.5px solid transparent; white-space: nowrap; }
 .tabs button.on { color: var(--ink); border-bottom-color: var(--brass); }
-main { max-width: 1240px; margin: 0 auto; padding: 24px 20px 120px; }
+#view { max-width: 1240px; margin: 0 auto; padding: 24px 20px 120px; }
 .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; }
 .card + .card { margin-top: 16px; }
 .hint { color: var(--muted); font-size: .9rem; margin: 4px 0 18px; }
@@ -156,7 +158,7 @@ td .muted { color: var(--muted); font-size: .82rem; display: block; }
 </style>
 </head>
 <body>
-<div id="app"></div>
+<main id="app"></main>
 <div class="toast" id="toast"></div>
 <script src="/assets/js/pricing.js" defer></script>
 <script src="/assets/js/admin.js" defer></script>

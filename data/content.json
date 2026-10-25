@@ -17,10 +17,10 @@
     "checkinTime": "",
     "checkoutTime": "",
     "heroImages": [
-      "/assets/img/h/lobby-reception.jpg",
-      "/assets/img/h/double-1.jpg",
-      "/assets/img/h/balcony-view.jpg",
-      "/assets/img/h/family-1.jpg"
+      "/assets/img/h/lobby-reception.webp",
+      "/assets/img/h/double-1.webp",
+      "/assets/img/h/balcony-view.webp",
+      "/assets/img/h/family-1.webp"
     ],
     "instagram": "https://www.instagram.com/calma__hotel/",
     "facebook": "https://web.facebook.com/profile.php?id=61592420100358",
@@ -54,10 +54,10 @@
         "Street view — window or balcony"
       ],
       "images": [
-        "/assets/img/h/single-1.jpg",
-        "/assets/img/h/room-door.jpg",
-        "/assets/img/h/bath-2.jpg",
-        "/assets/img/h/corridor.jpg"
+        "/assets/img/h/single-1.webp",
+        "/assets/img/h/room-door.webp",
+        "/assets/img/h/bath-2.webp",
+        "/assets/img/h/corridor.webp"
       ],
       "visible": true,
       "blocked": [],
@@ -94,11 +94,11 @@
         "Street view — window or balcony"
       ],
       "images": [
-        "/assets/img/h/double-1.jpg",
-        "/assets/img/h/double-2.jpg",
-        "/assets/img/h/double-3.jpg",
-        "/assets/img/h/double-4.jpg",
-        "/assets/img/h/bath-1.jpg"
+        "/assets/img/h/double-1.webp",
+        "/assets/img/h/double-2.webp",
+        "/assets/img/h/double-3.webp",
+        "/assets/img/h/double-4.webp",
+        "/assets/img/h/bath-1.webp"
       ],
       "visible": true,
       "blocked": [],
@@ -136,10 +136,10 @@
         "City-facing window"
       ],
       "images": [
-        "/assets/img/h/twin-1.jpg",
-        "/assets/img/h/twin-2.jpg",
-        "/assets/img/h/balcony-door-2.jpg",
-        "/assets/img/h/bath-2.jpg"
+        "/assets/img/h/twin-1.webp",
+        "/assets/img/h/twin-2.webp",
+        "/assets/img/h/balcony-door-2.webp",
+        "/assets/img/h/bath-2.webp"
       ],
       "visible": true,
       "blocked": [],
@@ -177,12 +177,12 @@
         "Street view — window or balcony"
       ],
       "images": [
-        "/assets/img/h/triple-1.jpg",
-        "/assets/img/h/triple-2.jpg",
-        "/assets/img/h/triple-3.jpg",
-        "/assets/img/h/triple-4.jpg",
-        "/assets/img/h/triple-5.jpg",
-        "/assets/img/h/shower.jpg"
+        "/assets/img/h/triple-1.webp",
+        "/assets/img/h/triple-2.webp",
+        "/assets/img/h/triple-3.webp",
+        "/assets/img/h/triple-4.webp",
+        "/assets/img/h/triple-5.webp",
+        "/assets/img/h/shower.webp"
       ],
       "visible": true,
       "blocked": [],
@@ -222,10 +222,10 @@
         "Street view — window or balcony"
       ],
       "images": [
-        "/assets/img/h/triple-4.jpg",
-        "/assets/img/h/triple-5.jpg",
-        "/assets/img/h/triple-3.jpg",
-        "/assets/img/h/bath-modern.jpg"
+        "/assets/img/h/triple-4.webp",
+        "/assets/img/h/triple-5.webp",
+        "/assets/img/h/triple-3.webp",
+        "/assets/img/h/bath-modern.webp"
       ],
       "visible": true,
       "blocked": [],
@@ -262,12 +262,12 @@
         "Work desk"
       ],
       "images": [
-        "/assets/img/h/family-1.jpg",
-        "/assets/img/h/family-2.jpg",
-        "/assets/img/h/family-3.jpg",
-        "/assets/img/h/family-4.jpg",
-        "/assets/img/h/family-5.jpg",
-        "/assets/img/h/bath-modern.jpg"
+        "/assets/img/h/family-1.webp",
+        "/assets/img/h/family-2.webp",
+        "/assets/img/h/family-3.webp",
+        "/assets/img/h/family-4.webp",
+        "/assets/img/h/family-5.webp",
+        "/assets/img/h/bath-modern.webp"
       ],
       "visible": true,
       "blocked": [],
@@ -306,11 +306,11 @@
         "Backlit vanity"
       ],
       "images": [
-        "/assets/img/h/suite-1.jpg",
-        "/assets/img/h/suite-2.jpg",
-        "/assets/img/h/suite-3.jpg",
-        "/assets/img/h/room-wardrobe.jpg",
-        "/assets/img/h/bath-modern.jpg"
+        "/assets/img/h/suite-1.webp",
+        "/assets/img/h/suite-2.webp",
+        "/assets/img/h/suite-3.webp",
+        "/assets/img/h/room-wardrobe.webp",
+        "/assets/img/h/bath-modern.webp"
       ],
       "visible": true,
       "blocked": [],
@@ -327,102 +327,102 @@
   ],
   "gallery": [
     {
-      "src": "/assets/img/h/lobby-reception.jpg",
+      "src": "/assets/img/h/lobby-reception.webp",
       "cat": "Lobby",
       "alt": "Reception desk with the CALMA emblem"
     },
     {
-      "src": "/assets/img/h/entrance.jpg",
+      "src": "/assets/img/h/entrance.webp",
       "cat": "Lobby",
       "alt": "Glass entrance door with the CALMA logo"
     },
     {
-      "src": "/assets/img/h/lobby-hall.jpg",
+      "src": "/assets/img/h/lobby-hall.webp",
       "cat": "Lobby",
       "alt": "Marble lobby hall"
     },
     {
-      "src": "/assets/img/h/staircase.jpg",
+      "src": "/assets/img/h/staircase.webp",
       "cat": "Lobby",
       "alt": "Staircase at the hotel entrance"
     },
     {
-      "src": "/assets/img/h/lounge.jpg",
+      "src": "/assets/img/h/lounge.webp",
       "cat": "Lobby",
       "alt": "Lounge corner with pink chairs"
     },
     {
-      "src": "/assets/img/h/corridor.jpg",
+      "src": "/assets/img/h/corridor.webp",
       "cat": "Lobby",
       "alt": "Marble corridor"
     },
     {
-      "src": "/assets/img/h/double-1.jpg",
+      "src": "/assets/img/h/double-1.webp",
       "cat": "Rooms",
       "alt": "Deluxe Double Room with city window"
     },
     {
-      "src": "/assets/img/h/triple-1.jpg",
+      "src": "/assets/img/h/triple-1.webp",
       "cat": "Rooms",
       "alt": "Triple Room"
     },
     {
-      "src": "/assets/img/h/family-1.jpg",
+      "src": "/assets/img/h/family-1.webp",
       "cat": "Rooms",
       "alt": "Family Room"
     },
     {
-      "src": "/assets/img/h/suite-1.jpg",
+      "src": "/assets/img/h/suite-1.webp",
       "cat": "Rooms",
       "alt": "Modern Suite with sitting corner"
     },
     {
-      "src": "/assets/img/h/twin-1.jpg",
+      "src": "/assets/img/h/twin-1.webp",
       "cat": "Rooms",
       "alt": "Classic Twin Room"
     },
     {
-      "src": "/assets/img/h/double-3.jpg",
+      "src": "/assets/img/h/double-3.webp",
       "cat": "Rooms",
       "alt": "Double room with desk and TV"
     },
     {
-      "src": "/assets/img/h/single-1.jpg",
+      "src": "/assets/img/h/single-1.webp",
       "cat": "Rooms",
       "alt": "Single Room with vanity"
     },
     {
-      "src": "/assets/img/h/bath-modern.jpg",
+      "src": "/assets/img/h/bath-modern.webp",
       "cat": "Bathrooms",
       "alt": "Marble bathroom with glass shower"
     },
     {
-      "src": "/assets/img/h/bath-1.jpg",
+      "src": "/assets/img/h/bath-1.webp",
       "cat": "Bathrooms",
       "alt": "Bathroom with walk-in shower"
     },
     {
-      "src": "/assets/img/h/bath-2.jpg",
+      "src": "/assets/img/h/bath-2.webp",
       "cat": "Bathrooms",
       "alt": "Bathroom with brass fittings"
     },
     {
-      "src": "/assets/img/h/shower.jpg",
+      "src": "/assets/img/h/shower.webp",
       "cat": "Bathrooms",
       "alt": "Rain shower"
     },
     {
-      "src": "/assets/img/h/balcony-view.jpg",
+      "src": "/assets/img/h/balcony-view.webp",
       "cat": "Views",
       "alt": "Balcony view over Downtown Cairo"
     },
     {
-      "src": "/assets/img/h/sunroom.jpg",
+      "src": "/assets/img/h/sunroom.webp",
       "cat": "Views",
       "alt": "Sunroom terrace with city views"
     },
     {
-      "src": "/assets/img/h/balcony-door.jpg",
+      "src": "/assets/img/h/balcony-door.webp",
       "cat": "Views",
       "alt": "Room opening onto the sunroom"
     }
@@ -495,7 +495,7 @@
       "title": "The Calm Welcome",
       "type": "Arrival program",
       "duration": "On arrival",
-      "image": "/assets/img/h/entrance.jpg",
+      "image": "/assets/img/h/entrance.webp",
       "description": "We track your flight, arrange a private pickup from Cairo International Airport, and have your room ready — followed by a short orientation of the neighbourhood.",
       "price": null,
       "visible": true
@@ -505,7 +505,7 @@
       "title": "Pyramids & Saqqara",
       "type": "Full day",
       "duration": "Approx. 8 hours",
-      "image": "/assets/img/pyramids-giza.jpg",
+      "image": "/assets/img/pyramids-giza.webp",
       "description": "The Giza Plateau and the quieter Step Pyramid at Saqqara with a private, licensed guide and a driver who paces the day sensibly. Lunch at a local restaurant along the way.",
       "price": null,
       "visible": true
@@ -515,7 +515,7 @@
       "title": "Old Cairo on Foot",
       "type": "Half day",
       "duration": "Approx. 4 hours",
-      "image": "/assets/img/old-cairo-night.jpg",
+      "image": "/assets/img/old-cairo-night.webp",
       "description": "A walking route through Islamic Cairo's minarets and stone alleys, ending at Khan El Khalili for tea and a slow browse through the market.",
       "price": null,
       "visible": true
@@ -525,7 +525,7 @@
       "title": "Egyptian Museum, Properly Explained",
       "type": "Half day",
       "duration": "Approx. 3 hours",
-      "image": "/assets/img/egyptian-museum.jpg",
+      "image": "/assets/img/egyptian-museum.webp",
       "description": "Our guide narrows the collection down to the pieces worth your time, including the Tutankhamun treasures, and explains the history in plain terms.",
       "price": null,
       "visible": true
@@ -535,7 +535,7 @@
       "title": "Evening on the Nile",
       "type": "Evening",
       "duration": "Approx. 1.5 hours",
-      "image": "/assets/img/nile-cruise.jpg",
+      "image": "/assets/img/nile-cruise.webp",
       "description": "A quiet hour on the water as the city's light softens — a gentle way to close a busy day of sightseeing.",
       "price": null,
       "visible": true
